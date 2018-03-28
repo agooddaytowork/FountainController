@@ -4,11 +4,27 @@ import QtQuick.Controls 2.2
 
 Item {
     id: root
+    objectName: "SetupModePage"
     property int programIndex: 0
     property int fountaingroupIndex: 0
     property int fountainIndex: 0
 
-    property ListModel fountainProgramModel
+    property ListModel fountainProgramModel: ListModel {}
+
+
+    Timer
+    {
+        id: initTimer
+        interval: 0
+        running: true
+        triggeredOnStart: true
+        repeat: false
+
+        onTriggered:
+        {
+            generateDefaultProgram("Default Program")
+        }
+    }
 
     function generateDefaultProgram(programName)
     {
@@ -17,7 +33,7 @@ Item {
                                         "programName" : programName,
                                         "groups":[
 
-                                            {"groupName": " tủ điện 1",
+                                            {"groupName": "FO1",
                                                 "fountainGroupEnable": false,
                                                 "fountains": [
                                                     {"fountainName": 1,
@@ -52,7 +68,7 @@ Item {
 
                                                 ]
                                             },
-                                            {"groupName": " tủ điện 2",
+                                            {"groupName": "FO2",
                                                 "fountainGroupEnable": false,
                                                 "fountains": [
                                                     {"fountainName": 1,
@@ -86,42 +102,7 @@ Item {
 
                                                 ]
                                             },
-                                            {"groupName": " tủ điện 3",
-                                                "fountainGroupEnable": false,
-                                                "fountains": [
-                                                    {"fountainName": 1,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 2,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-
-                                                    {"fountainName": 3,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 4,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 5,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 6,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 7,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 8,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 9,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false}
-
-
-                                                ]
-                                            },
-                                            {"groupName": " tủ điện 4",
+                                            {"groupName": "FO3",
                                                 "fountainGroupEnable": false,
                                                 "fountains": [
                                                     {"fountainName": 1,
@@ -156,7 +137,41 @@ Item {
 
                                                 ]
                                             },
-                                            {"groupName": " tủ điện 5",
+                                            {"groupName": "FO4",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+                                                ]
+                                            },
+                                            {"groupName": "FO5",
                                                 "fountainGroupEnable": false,
                                                 "fountains": [
                                                     {"fountainName": 1,
@@ -191,7 +206,7 @@ Item {
 
                                                 ]
                                             },
-                                            {"groupName": " tủ điện 6",
+                                            {"groupName": "FO6",
                                                 "fountainGroupEnable": false,
                                                 "fountains": [
                                                     {"fountainName": 1,
@@ -226,7 +241,7 @@ Item {
 
                                                 ]
                                             },
-                                            {"groupName": " tủ điện 7",
+                                            {"groupName": "FO7",
                                                 "fountainGroupEnable": false,
                                                 "fountains": [
                                                     {"fountainName": 1,
@@ -261,7 +276,7 @@ Item {
 
                                                 ]
                                             },
-                                            {"groupName": " tủ điện sân khô",
+                                            {"groupName": "Sân khô",
                                                 "fountainGroupEnable": false,
                                                 "fountains": [
                                                     {"fountainName": 1,
@@ -360,13 +375,13 @@ Item {
                         height: parent.height
                         anchors.right: parent.right
 
-                        //                        SwipeDelegate.onClicked: stationList.model.remove(index)
+                        SwipeDelegate.onClicked: fountainProgramModel.remove(index)
 
                         background: Rectangle {
                             color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
                         }
-                    }
 
+                    }
 
                     onClicked: {
 

@@ -33,8 +33,10 @@ ApplicationWindow {
                                text: "Setup Mode"
                                font.pixelSize: 16
                                onTriggered: {
-                                   stackView.push(Qt.resolvedUrl("SetupModePage.qml"), {"fountainProgramModel": testModel})
-                                   console.log("Setup Mode page")
+                                stackView.push(Qt.resolvedUrl("SetupModePage.qml")/*, {"fountainProgramModel": testModel}*/)
+
+
+
                                }
 
                            }
@@ -67,6 +69,29 @@ ApplicationWindow {
                        id: addNewProgramButton
                        implicitHeight: 60
                        font.pixelSize: Qt.application.font.pixelSize * 1.6
+                        visible: {
+                            if(stackView.currentItem.objectName == "SetupModePage" || stackView.currentItem.objectName == "AutoModePage") true
+                            else false
+
+                        }
+
+                       onClicked:
+                       {
+                           if(stackView.currentItem.objectName == "SetupModePage")
+                           {
+                               stackView.currentItem.generateDefaultProgram("Test Program")
+                           }
+                           else if(stackView.currentItem.objectName == "AutoModePage")
+                           {
+                               stackView.currentItem.openTimeSlotDialog = true
+                           }
+                       }
+                       background: Rectangle
+                       {
+                           width: 200
+                           height: toolButton.implicitHeight
+                           color: addNewProgramButton.pressed ? "tomato" : "white"
+                       }
 
 
                    }
