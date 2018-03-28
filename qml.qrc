@@ -5,5 +5,9 @@
         <file>AutoModePage.qml</file>
         <file>SetupModePage.qml</file>
         <file>ManualModePage.qml</file>
+        <file>images/play.png</file>
+        <file>images/serverOffline.png</file>
+        <file>images/serverOnline.png</file>
+        <file>images/stop.png</file>
     </qresource>
 </RCC>

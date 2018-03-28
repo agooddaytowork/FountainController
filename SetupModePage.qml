@@ -8,153 +8,297 @@ Item {
     property int fountaingroupIndex: 0
     property int fountainIndex: 0
 
-    property ListModel fountainProgramModel : ListModel {
-        ListElement{
-            programName: "chương trình 1"
-            groups:[
-                ListElement
-                {
-                    groupName: "tủ điện 1"
-                    fountainGroupEnable: false
-                    fountains:[
-                        ListElement
-                        {
-                            fountainName: 1
-                            fountainProgram: 5
-                            founTainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 2
-                            fountainProgram: 5
-                            founTainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 3
-                            fountainProgram: 5
-                            founTainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 4
-                            fountainProgram: 5
-                            founTainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 5
-                            fountainProgram: 5
-                            founTainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 6
-                            fountainProgram: 5
-                            founTainEnable: false
-                        }
-                        ,
-                        ListElement
-                        {
-                            fountainName: 7
-                            fountainProgram: 5
-                            founTainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 8
-                            fountainProgram: 5
-                            founTainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 9
-                            fountainProgram: 5
-                            founTainEnable: false
-                        }
-                    ]
-                },
-                ListElement
-                {
-                    groupName: "tủ điện 2"
-                    fountainGroupEnable: true
-                    fountains:[
-                        ListElement
-                        {
-                            fountainName: 1
-                            fountainProgram: 5
-                            founTainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 2
-                            fountainProgram: 2
-                            founTainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 3
-                            fountainProgram: 4
-                            founTainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 4
-                            fountainProgram: 5
-                            founTainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 5
-                            fountainProgram: 5
-                            founTainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 6
-                            fountainProgram: 5
-                            founTainEnable: false
-                        }
-                        ,
-                        ListElement
-                        {
-                            fountainName: 7
-                            fountainProgram: 5
-                            founTainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 8
-                            fountainProgram: 5
-                            founTainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 9
-                            fountainProgram: 5
-                            founTainEnable: false
-                        }
-                    ]
-                }]
+    property ListModel fountainProgramModel
 
-        }
-        ListElement{
-            programName: "chương trình 2"
-            groups:[
-                ListElement
-                {
-                    groupName: "tủ điện 3"
-                    fountainGroupEnable: true
-                },
-                ListElement
-                {
-                    groupName: "tủ điện 4"
-                    fountainGroupEnable: false
-                }]
+    function generateDefaultProgram(programName)
+    {
 
-        }
+        fountainProgramModel.append({
+                                        "programName" : programName,
+                                        "groups":[
+
+                                            {"groupName": " tủ điện 1",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+
+                                                ]
+                                            },
+                                            {"groupName": " tủ điện 2",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+                                                ]
+                                            },
+                                            {"groupName": " tủ điện 3",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+
+                                                ]
+                                            },
+                                            {"groupName": " tủ điện 4",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+
+                                                ]
+                                            },
+                                            {"groupName": " tủ điện 5",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+
+                                                ]
+                                            },
+                                            {"groupName": " tủ điện 6",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+
+                                                ]
+                                            },
+                                            {"groupName": " tủ điện 7",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+
+                                                ]
+                                            },
+                                            {"groupName": " tủ điện sân khô",
+                                                "fountainGroupEnable": false,
+                                                "fountains": [
+                                                    {"fountainName": 1,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 2,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+
+                                                    {"fountainName": 3,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 4,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 5,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 6,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 7,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 8,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false},
+                                                    {"fountainName": 9,
+                                                        "fountainProgram":1,
+                                                        "fountainEnable": false}
+
+                                                ]
+                                            }
+
+                                        ]
+                                    })
     }
-
 
     Grid
     {
@@ -346,11 +490,11 @@ Item {
                         text: "Enable"
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        checked: founTainEnable
+                        checked: fountainEnable
 
                         onClicked:
                         {
-                            fountainProgramModel.get(programIndex).groups.get(fountaingroupIndex).fountains.setProperty(fountainSwipeDelegateIndex,"founTainEnable", checked)
+                            fountainProgramModel.get(programIndex).groups.get(fountaingroupIndex).fountains.setProperty(fountainSwipeDelegateIndex,"fountainEnable", checked)
                         }
                     }
 
