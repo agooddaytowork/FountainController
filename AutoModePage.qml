@@ -35,6 +35,7 @@ Item {
         }
     }
 
+
     function generateDefaultTimeSLot()
     {
 
@@ -85,7 +86,6 @@ Item {
             }
         }
 
-
     }
 
 
@@ -97,7 +97,7 @@ Item {
         {
             generateDefaultTimeSLot()
             appIoManager.write("appData",root.serializeListModel(timeSLotModelUnsorted))
-//            sortTimeSlotModel()
+                 sortTimeSlotModel()
 
         }
         else
@@ -116,10 +116,6 @@ Item {
 
         model: timeSLotModelUnsorted
 
-
-
-
-
         delegate: SwipeDelegate{
             id: timeSlotRec
             width: autoModeGridView.cellWidth
@@ -136,7 +132,7 @@ Item {
                 Label
                 {
                     id: fromHourLabel
-                    text: fromHour+"."+fromMinute+" "+FromHourdayNightPeriod+"-"+toHour+"."+toMinute+ " "+ ToHourdayNightPeriod
+                    text: fromHour+"."+fromMinute+" "+FromHourdayNightPeriod+"-"+(toHour+1)+"."+toMinute+ " "+ ToHourdayNightPeriod
                     font.pixelSize: 30
                 }
 
@@ -196,13 +192,14 @@ Item {
         x: (parent.width- timeSlotDialogRec.width)/2
         y: (parent.height - timeSlotDialogRec.height)/2
         parent: ApplicationWindow.overlay
+        closePolicy: Popup.NoAutoClose || Popup.CloseOnEscape
         modal: true
 
 
         onAboutToShow:
         {
             toOrFromSelector.fromIsSelected = true
-           hoursTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).fromHour -1
+            hoursTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).fromHour -1
             minutesTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).fromMinute
             if(timeSLotModelUnsorted.get(currentUnsortedIndex).FromHourdayNightPeriod === "AM")
             {
@@ -231,20 +228,8 @@ Item {
             Column
             {
                 anchors.fill: parent
-                spacing: 5
-
-                Row
-                {
-                    Button
-                    {
-                        text: "Close"
-                    }
-
-                    Button
-                    {
-                        text: "Add new"
-                    }
-                }
+                spacing: 10
+                anchors.topMargin: 10
 
                 Row
                 {
@@ -295,10 +280,32 @@ Item {
                                     if(modelName == "From")
                                     {
                                         toOrFromSelector.fromIsSelected = true
+
+                                        hoursTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).fromHour -1
+                                        minutesTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).fromMinute
+                                        if(timeSLotModelUnsorted.get(currentUnsortedIndex).FromHourdayNightPeriod === "AM")
+                                        {
+                                            amPmTumbler.currentIndex = 0
+                                        }
+                                        else
+                                        {
+                                            amPmTumbler.currentIndex = 1
+                                        }
                                     }
                                     else
                                     {
                                         toOrFromSelector.fromIsSelected = false
+
+                                        hoursTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).toHour -1
+                                        minutesTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).toMinute
+                                        if(timeSLotModelUnsorted.get(currentUnsortedIndex).ToHourdayNightPeriod === "AM")
+                                        {
+                                            amPmTumbler.currentIndex = 0
+                                        }
+                                        else
+                                        {
+                                            amPmTumbler.currentIndex = 1
+                                        }
                                     }
                                 }
                             }
@@ -330,18 +337,51 @@ Item {
                         id: hoursTumbler
                         model: 12
                         delegate: delegateComponent
+
+                        onCurrentIndexChanged: {
+                            if(toOrFromSelector.fromIsSelected)
+                            {
+                                timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"fromHour", currentIndex +1)
+                            }
+                            else
+                            {
+ timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"toHour", currentIndex +1)
+                            }
+
+
+                        }
                     }
 
                     Tumbler {
                         id: minutesTumbler
                         model: 60
                         delegate: delegateComponent
+                        onCurrentIndexChanged: {
+                            if(toOrFromSelector.fromIsSelected)
+                            {
+                                timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"fromMinute", currentIndex)
+                            }
+                            else
+                            {
+ timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"toMinute", currentIndex)
+                            }
+                        }
                     }
 
                     Tumbler {
                         id: amPmTumbler
                         model: ["AM", "PM"]
                         delegate: delegateComponent
+                        onCurrentIndexChanged: {
+                            if(toOrFromSelector.fromIsSelected)
+                            {
+                                timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"FromHourdayNightPeriod", currentIndex == 0? "AM":"PM")
+                            }
+                            else
+                            {
+ timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"ToHourdayNightPeriod", currentIndex)
+                            }
+                        }
                     }
                 }
 
@@ -435,7 +475,7 @@ Item {
 
                 Row
                 {
-                     anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                     Label{
                         text: "Chuong trinh: "
                         anchors.verticalCenter: parent.verticalCenter
@@ -457,7 +497,29 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
+                Row
+                {
 
+                    spacing: 100
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Button
+                    {
+                        text: "Cancel"
+
+
+                    }
+
+                    Button
+                    {
+                        text: "Add new"
+
+
+                        onClicked: {
+                            timeSlotDialog.close()
+                            root.sortTimeSlotModel()
+                        }
+                    }
+                }
             }
 
             Component {

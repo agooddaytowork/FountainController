@@ -11,12 +11,6 @@ Item {
 
     property ListModel fountainProgramModel: ListModel {}
 
-
-    function toMsecsSinceEpoch(date) {
-        var msecs = date.getTime();
-        return msecs;
-    }
-
     function updateProgramToTextFile()
     {
         dataIoManager.write("Data", root.serializeListModelForSetupPage(fountainProgramModel))
@@ -29,8 +23,8 @@ Item {
         for(var i = 0; i < theList.count; i++)
         {
             var dataModel = {}
-                dataModel["programName"]  = theList.get(i).programName
-                var groupModel = [];
+            dataModel["programName"]  = theList.get(i).programName
+            var groupModel = [];
             for (var ii =0; ii < theList.get(i).groups.count; ii++)
             {
 
@@ -56,7 +50,7 @@ Item {
             Data.push(dataModel)
         }
 
-  return JSON.stringify(Data)
+        return JSON.stringify(Data)
 
     }
 
@@ -71,7 +65,7 @@ Item {
         {
             generateDefaultProgram("Default Program")
 
-           // dataIoManager.write("Data", root.serializeListModelForSetupPage(fountainProgramModel))
+            // dataIoManager.write("Data", root.serializeListModelForSetupPage(fountainProgramModel))
 
         }
         else
@@ -79,10 +73,14 @@ Item {
             fountainProgramModel.clear()
 
 
-               fountainProgramModel.append(JSON.parse(dataIoManager.read("Data")))
+            fountainProgramModel.append(JSON.parse(dataIoManager.read("Data")))
 
 
         }
+
+        programList.currentIndex = 0
+        fountainGroupList.currentIndex = 0
+        fountainList.currentIndex = 0
     }
 
     function generateDefaultProgram(programName)
@@ -456,6 +454,12 @@ Item {
                         fountainGroupList.model = 0
                         fountainGroupList.model = fountainProgramModel.get(programListSwipeDelegateIndex).groups
                         root.programIndex = programListSwipeDelegateIndex
+
+                        fountainGroupList.currentIndex =0
+                        fountainList.currentIndex = 0
+                        fountaingroupIndex = 0
+                        fountainIndex = 0
+                        fountainList.model = fountainProgramModel.get(root.programIndex).groups.get(fountaingroupIndex).fountains
 
                     }
                 }
