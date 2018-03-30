@@ -12,6 +12,21 @@ Item {
     property ListModel timeSlotModelSorted : ListModel {}
     property int currentUnsortedIndex: 0
 
+
+    function serializeListModel(theList)
+    {
+        var dataModel=[]
+
+        for(var i = 0; i < theList.count; i++)
+        {
+
+
+            dataModel.push(theList.get(i))
+        }
+
+        return JSON.stringify(dataModel)
+    }
+
     onOpenTimeSlotDialogChanged: {
         if(openTimeSlotDialog)
         {
@@ -25,10 +40,11 @@ Item {
 
         timeSLotModelUnsorted.append({
                                          "fromHour" : 8,
-                                         "dayNightPeriod": "AM",
+                                         "FromHourdayNightPeriod": "AM",
                                          "fromMinute" : 5,
                                          "toHour": 9,
                                          "toMinute": 20,
+                                         "ToHourdayNightPeriod": "AM",
                                          "timeSlotEnable": false,
                                          "repeat": 0,
                                          "program": 1,
@@ -40,6 +56,57 @@ Item {
     }
 
 
+    function sortTimeSlotModel()
+    {
+
+        if(timeSLotModelUnsorted.count === 1 ) return
+
+        var sorted = false
+
+        while(!sorted)
+        {
+            var count = 0
+            for (var i =0; i < timeSLotModelUnsorted.count -1; i++)
+            {
+                if(timeSLotModelUnsorted.get(i).fromHour > timeSLotModelUnsorted.get(i+1).fromHour)
+                {
+                    timeSLotModelUnsorted.move(i,i + 1, 1)
+                    count ++;
+                }
+            }
+
+            if(count == 0)
+            {
+                sorted = true
+            }
+            else
+            {
+                count = 0
+            }
+        }
+
+
+    }
+
+
+    Component.onCompleted:
+    {
+
+        console.log("LOADDDDD")
+        if(appIoManager.getNameListCount() === 0)
+        {
+            generateDefaultTimeSLot()
+            appIoManager.write("appData",root.serializeListModel(timeSLotModelUnsorted))
+//            sortTimeSlotModel()
+
+        }
+        else
+        {
+            timeSLotModelUnsorted.clear()
+
+            timeSLotModelUnsorted.append(JSON.parse(appIoManager.read("appData")))
+        }
+    }
 
     GridView{
         id: autoModeGridView
@@ -47,7 +114,10 @@ Item {
         cellHeight: parent.height/2
         cellWidth: parent.width/4
 
-        model: 5
+        model: timeSLotModelUnsorted
+
+
+
 
 
         delegate: SwipeDelegate{
@@ -66,14 +136,14 @@ Item {
                 Label
                 {
                     id: fromHourLabel
-                    text: "5.30 AM - 6.30 AM"
+                    text: fromHour+"."+fromMinute+" "+FromHourdayNightPeriod+"-"+toHour+"."+toMinute+ " "+ ToHourdayNightPeriod
                     font.pixelSize: 30
                 }
 
                 Label
                 {
                     id: timeSlotDescLabel
-                    text: "Chơi buổi sáng"
+                    text: description
                     font.pixelSize: 20
 
                 }
@@ -88,7 +158,7 @@ Item {
                 Label
                 {
                     id: programLabel
-                    text: "Chương trình: 3"
+                    text: "Chương trình: " + program
                     font.pixelSize: 20
                 }
             }
@@ -103,6 +173,7 @@ Item {
                 anchors.rightMargin: 20
                 text: "test"
                 z:2
+                checked: timeSlotEnable
 
             }
             background: Rectangle
@@ -133,7 +204,7 @@ Item {
             toOrFromSelector.fromIsSelected = true
            hoursTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).fromHour -1
             minutesTumbler.currentIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).fromMinute
-            if(timeSLotModelUnsorted.get(currentUnsortedIndex).dayNightPeriod === "AM")
+            if(timeSLotModelUnsorted.get(currentUnsortedIndex).FromHourdayNightPeriod === "AM")
             {
                 amPmTumbler.currentIndex = 0
             }

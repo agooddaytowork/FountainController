@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.3
 
 ApplicationWindow {
     id: window
@@ -9,7 +10,8 @@ ApplicationWindow {
     title: qsTr("FountainController")
 
     minimumWidth: 1200
-    minimumHeight: 600
+    minimumHeight: 800
+
 
     header: ToolBar {
                contentHeight: toolButton.implicitHeight
@@ -34,8 +36,6 @@ ApplicationWindow {
                                font.pixelSize: 16
                                onTriggered: {
                                 stackView.push(Qt.resolvedUrl("SetupModePage.qml")/*, {"fountainProgramModel": testModel}*/)
-
-
 
                                }
 
@@ -79,7 +79,8 @@ ApplicationWindow {
                        {
                            if(stackView.currentItem.objectName == "SetupModePage")
                            {
-                               stackView.currentItem.generateDefaultProgram("Test Program")
+                                inputDialog.open()
+
                            }
                            else if(stackView.currentItem.objectName == "AutoModePage")
                            {
@@ -113,6 +114,7 @@ ApplicationWindow {
 
     StackView {
         id: stackView
+
         initialItem: AutoModePage
         {
             id: autoModeMainPage
@@ -281,4 +283,44 @@ ApplicationWindow {
 
             }
         }
+
+    Dialog {
+                   id: inputDialog
+
+                   x: (parent.width - width) / 2
+                   y: (parent.height - height) / 2
+                   parent: Overlay.overlay
+
+                   focus: true
+                   modal: true
+                   title: "Input"
+                   standardButtons: Dialog.Ok | Dialog.Cancel
+
+                   ColumnLayout {
+                       spacing: 20
+                       anchors.fill: parent
+                       Label {
+                           elide: Label.ElideRight
+                           text: "Please enter Program name:"
+                           Layout.fillWidth: true
+                       }
+                       TextField {
+                           id: inputDialogTextField
+                           focus: true
+                           placeholderText: "Program name"
+                           Layout.fillWidth: true
+                       }
+
+                   }
+
+                   onAccepted:
+                      {
+                       stackView.currentItem.generateDefaultProgram(inputDialogTextField.text)
+                   }
+                   onDiscarded:
+                   {
+                       inputDialogTextField.text = ""
+                       inputDialog.close()
+                   }
+               }
 }

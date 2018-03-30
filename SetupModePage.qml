@@ -12,17 +12,76 @@ Item {
     property ListModel fountainProgramModel: ListModel {}
 
 
-    Timer
-    {
-        id: initTimer
-        interval: 0
-        running: true
-        triggeredOnStart: true
-        repeat: false
+    function toMsecsSinceEpoch(date) {
+        var msecs = date.getTime();
+        return msecs;
+    }
 
-        onTriggered:
+    function updateProgramToTextFile()
+    {
+        dataIoManager.write("Data", root.serializeListModelForSetupPage(fountainProgramModel))
+    }
+
+    function serializeListModelForSetupPage(theList)
+    {
+
+        var Data = []
+        for(var i = 0; i < theList.count; i++)
+        {
+            var dataModel = {}
+                dataModel["programName"]  = theList.get(i).programName
+                var groupModel = [];
+            for (var ii =0; ii < theList.get(i).groups.count; ii++)
+            {
+
+                var fountainModel = []
+                var groupObject ={}
+
+
+                for(var iii =0; iii < theList.get(i).groups.get(ii).fountains.count; iii++)
+                {
+                    fountainModel.push(theList.get(i).groups.get(ii).fountains.get(iii))
+                }
+                groupObject["groupName"] = theList.get(i).groups.get(ii).groupName
+                groupObject["fountains"] = fountainModel
+                groupObject["fountainGroupEnable"] = theList.get(i).groups.get(ii).fountainGroupEnable
+                fountainModel=[]
+                groupModel.push(groupObject)
+
+            }
+
+
+            groupObject = {}
+            dataModel["groups"] = groupModel
+            Data.push(dataModel)
+        }
+
+  return JSON.stringify(Data)
+
+    }
+
+
+
+
+
+
+    Component.onCompleted: {
+
+        if(dataIoManager.getNameListCount() == 0)
         {
             generateDefaultProgram("Default Program")
+
+           // dataIoManager.write("Data", root.serializeListModelForSetupPage(fountainProgramModel))
+
+        }
+        else
+        {
+            fountainProgramModel.clear()
+
+
+               fountainProgramModel.append(JSON.parse(dataIoManager.read("Data")))
+
+
         }
     }
 
@@ -273,7 +332,6 @@ Item {
                                                         "fountainProgram":1,
                                                         "fountainEnable": false}
 
-
                                                 ]
                                             },
                                             {"groupName": "Sân khô",
@@ -313,6 +371,10 @@ Item {
 
                                         ]
                                     })
+
+        updateProgramToTextFile()
+
+
     }
 
     Grid
@@ -375,7 +437,12 @@ Item {
                         height: parent.height
                         anchors.right: parent.right
 
-                        SwipeDelegate.onClicked: fountainProgramModel.remove(index)
+                        SwipeDelegate.onClicked:
+                        {
+
+                            fountainProgramModel.remove(index)
+                            updateProgramToTextFile()
+                        }
 
                         background: Rectangle {
                             color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
@@ -449,6 +516,8 @@ Item {
                         onClicked: {
                             console.log("clicked")
                             fountainProgramModel.get(programIndex).groups.setProperty(fountainGroupListSwipeDelegateIndex,"fountainGroupEnable", checked)
+
+                            updateProgramToTextFile()
                         }
 
 
@@ -510,6 +579,7 @@ Item {
                         onClicked:
                         {
                             fountainProgramModel.get(programIndex).groups.get(fountaingroupIndex).fountains.setProperty(fountainSwipeDelegateIndex,"fountainEnable", checked)
+                            updateProgramToTextFile()
                         }
                     }
 
@@ -525,8 +595,10 @@ Item {
                         font.pixelSize: 16
                         onActivated: {
 
-                            console.log("askdjaslkjd")
+
                             fountainProgramModel.get(programIndex).groups.get(fountaingroupIndex).fountains.setProperty(fountainSwipeDelegateIndex,"fountainProgram", currentIndex)
+
+                            updateProgramToTextFile()
                         }
 
                     }

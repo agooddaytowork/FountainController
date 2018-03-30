@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-
+#include "fileio.h"
+#include <QQmlContext>
 int main(int argc, char *argv[])
 {
 #if defined(Q_OS_WIN)
@@ -10,6 +11,14 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    FileIO appIoManager("App");
+    FileIO dataIoManager("Data");
+
+      QQmlContext *thisContext = engine.rootContext();
+    thisContext->setContextProperty("appIoManager", &appIoManager);
+    thisContext->setContextProperty("dataIoManager", &dataIoManager);
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
