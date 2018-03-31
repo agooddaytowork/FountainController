@@ -88,6 +88,11 @@ Item {
 
     }
 
+    function updateAppDataToFile()
+    {
+        appIoManager.write("appData",root.serializeListModel(timeSLotModelUnsorted))
+    }
+
 
     Component.onCompleted:
     {
@@ -96,14 +101,13 @@ Item {
         if(appIoManager.getNameListCount() === 0)
         {
             generateDefaultTimeSLot()
-            appIoManager.write("appData",root.serializeListModel(timeSLotModelUnsorted))
-                 sortTimeSlotModel()
+            sortTimeSlotModel()
+            updateAppDataToFile()
 
         }
         else
         {
             timeSLotModelUnsorted.clear()
-
             timeSLotModelUnsorted.append(JSON.parse(appIoManager.read("appData")))
         }
     }
@@ -122,6 +126,88 @@ Item {
             height: autoModeGridView.cellHeight
             //            border.width: 1
             //            border.color: "black"
+
+
+
+            swipe.right:Rectangle{
+
+                height: parent.height * 0.5
+                anchors.right: parent.right
+                color: "black"
+                width: parent.width *0.4
+                anchors.bottom: parent.bottom
+
+                Column{
+
+                    anchors.fill: parent
+                    Label {
+                        id: deleteLabel
+                        text: qsTr("Delete")
+                        color: "white"
+                        verticalAlignment: Label.AlignVCenter
+                        padding: 12
+
+
+                        SwipeDelegate.onClicked:
+                        {
+
+                            timeSLotModelUnsorted.remove(index)
+                            root.sortTimeSlotModel()
+                            root.updateAppDataToFile()
+                        }
+
+                        background: Rectangle {
+                            color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                        }
+
+                    }
+
+                    Label {
+                        id: editLabel
+                        text: qsTr("Edit")
+                        color: "white"
+                        verticalAlignment: Label.AlignVCenter
+                        padding: 12
+
+
+                        SwipeDelegate.onClicked:
+                        {
+
+                            currentUnsortedIndex = index
+                            timeSlotDialog.open()
+                        }
+
+                        background: Rectangle {
+                            color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                        }
+
+                    }
+                }
+
+            }
+
+//            Label {
+//                id: deleteLabel
+//                text: qsTr("Delete")
+//                color: "white"
+//                verticalAlignment: Label.AlignVCenter
+//                padding: 12
+//                height: parent.height
+//                anchors.right: parent.right
+
+//                SwipeDelegate.onClicked:
+//                {
+
+//                    timeSLotModelUnsorted.remove(index)
+//                    root.sortTimeSlotModel()
+//                    root.updateAppDataToFile()
+//                }
+
+//                background: Rectangle {
+//                    color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+//                }
+
+//            }
 
 
             Column{
@@ -163,7 +249,7 @@ Item {
             {
                 id: enableSchedulerSwitch
 
-                anchors.right: parent.right
+                anchors.left: parent.left
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 20
                 anchors.rightMargin: 20
@@ -194,6 +280,8 @@ Item {
         parent: ApplicationWindow.overlay
         closePolicy: Popup.NoAutoClose || Popup.CloseOnEscape
         modal: true
+
+        property int repeatsIndex: timeSLotModelUnsorted.get(currentUnsortedIndex).repeat
 
 
         onAboutToShow:
@@ -345,7 +433,7 @@ Item {
                             }
                             else
                             {
- timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"toHour", currentIndex +1)
+                                timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"toHour", currentIndex +1)
                             }
 
 
@@ -363,7 +451,7 @@ Item {
                             }
                             else
                             {
- timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"toMinute", currentIndex)
+                                timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"toMinute", currentIndex)
                             }
                         }
                     }
@@ -379,7 +467,7 @@ Item {
                             }
                             else
                             {
- timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"ToHourdayNightPeriod", currentIndex)
+                                timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"ToHourdayNightPeriod", currentIndex == 0? "AM":"PM")
                             }
                         }
                     }
@@ -406,7 +494,7 @@ Item {
                             }
 
                             border.width: 2
-                            color: selected ? "tomato" : "white"
+                            color: timeSlotDialog.repeatsIndex & theBit ? "tomato" : "white"
 
                             MouseArea
                             {
@@ -416,10 +504,15 @@ Item {
                                     if(selected)
                                     {
                                         selected = false
+                                        timeSlotDialog.repeatsIndex = timeSlotDialog.repeatsIndex & ~(theBit)
+                                        console.log(timeSlotDialog.repeatsIndex)
                                     }
                                     else
                                     {
                                         selected = true
+                                        timeSlotDialog.repeatsIndex = timeSlotDialog.repeatsIndex | theBit
+
+                                        console.log(timeSlotDialog.repeatsIndex)
                                     }
                                 }
                             }
@@ -434,36 +527,43 @@ Item {
                         ListElement{
 
                             day: "Mon"
+                            theBit: 1
                             selected: false
                         }
                         ListElement{
 
                             day: "Tue"
+                            theBit: 2
                             selected: false
                         }
                         ListElement{
 
                             day: "Wed"
+                            theBit: 4
                             selected: false
                         }
                         ListElement{
 
                             day: "Thu"
+                            theBit: 8
                             selected: false
                         }
                         ListElement{
 
                             day: "Fri"
+                            theBit: 16
                             selected: false
                         }
                         ListElement{
 
                             day: "Sat"
+                            theBit: 32
                             selected: false
                         }
                         ListElement{
 
                             day: "Sun"
+                            theBit: 64
                             selected: false
                         }
 
@@ -495,6 +595,11 @@ Item {
                     placeholderText: "Ghi chu"
                     width: parent.width * 0.8
                     anchors.horizontalCenter: parent.horizontalCenter
+
+                    onTextChanged:
+                    {
+                        timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"description", descriptionTextField.text)
+                    }
                 }
 
                 Row
@@ -506,6 +611,15 @@ Item {
                     {
                         text: "Cancel"
 
+                        onClicked:
+                        {
+                            timeSlotDialog.close()
+                            timeSLotModelUnsorted.remove(currentUnsortedIndex)
+                            currentUnsortedIndex = currentUnsortedIndex -1
+                            root.sortTimeSlotModel()
+                            root.updateAppDataToFile()
+                        }
+
 
                     }
 
@@ -515,8 +629,16 @@ Item {
 
 
                         onClicked: {
+
+
+                            timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"repeat", timeSlotDialog.repeatsIndex)
+
+                            timeSlotDialog.repeatsIndex = 0
                             timeSlotDialog.close()
+
                             root.sortTimeSlotModel()
+                            root.updateAppDataToFile()
+
                         }
                     }
                 }
