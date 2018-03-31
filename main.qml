@@ -85,7 +85,9 @@ ApplicationWindow {
                            else if(stackView.currentItem.objectName == "AutoModePage")
                            {
 
+
                                stackView.currentItem.openTimeSlotDialog = true
+
                            }
                        }
                        background: Rectangle

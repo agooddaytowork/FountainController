@@ -115,7 +115,7 @@ Item {
     GridView{
         id: autoModeGridView
         anchors.fill: parent
-        cellHeight: parent.height/2
+        cellHeight: 300
         cellWidth: parent.width/4
 
         model: timeSLotModelUnsorted
@@ -146,6 +146,8 @@ Item {
                         color: "white"
                         verticalAlignment: Label.AlignVCenter
                         padding: 12
+                        width: parent.width
+                        height: parent.height/2
 
 
                         SwipeDelegate.onClicked:
@@ -168,12 +170,17 @@ Item {
                         color: "white"
                         verticalAlignment: Label.AlignVCenter
                         padding: 12
+                        width: parent.width
+                        height: parent.height/2
 
 
                         SwipeDelegate.onClicked:
                         {
 
                             currentUnsortedIndex = index
+                            autoModeGridView.currentIndex = currentUnsortedIndex
+                            timeSlotDialog.repeatsIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).repeat
+                            timeSlotDialog.isEditMode = true
                             timeSlotDialog.open()
                         }
 
@@ -185,29 +192,6 @@ Item {
                 }
 
             }
-
-//            Label {
-//                id: deleteLabel
-//                text: qsTr("Delete")
-//                color: "white"
-//                verticalAlignment: Label.AlignVCenter
-//                padding: 12
-//                height: parent.height
-//                anchors.right: parent.right
-
-//                SwipeDelegate.onClicked:
-//                {
-
-//                    timeSLotModelUnsorted.remove(index)
-//                    root.sortTimeSlotModel()
-//                    root.updateAppDataToFile()
-//                }
-
-//                background: Rectangle {
-//                    color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
-//                }
-
-//            }
 
 
             Column{
@@ -222,6 +206,54 @@ Item {
                     font.pixelSize: 30
                 }
 
+                Row
+                {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Repeater
+                    {
+                        id: weekdays
+                        model: weekdaysModel
+                        //                        model: 7
+
+                        delegate: Rectangle
+                        {
+                            width: 35
+                            height: 35
+
+                            Label
+                            {
+                                text: day
+                                anchors.centerIn: parent
+                            }
+
+                            border.width: 2
+                            color:{
+
+                                if(repeat & theBit)
+
+                                {
+                                    "tomato"
+
+                                }
+                                else
+                                {
+                                    "white"
+
+                                }
+
+                            }
+
+
+                        }
+
+                    }
+
+
+
+
+                }
+
+
                 Label
                 {
                     id: timeSlotDescLabel
@@ -230,13 +262,6 @@ Item {
 
                 }
 
-
-                Label
-                {
-                    id: repeateLabel
-                    text: "Lặp lại: thứ Hai"
-                    font.pixelSize: 20
-                }
                 Label
                 {
                     id: programLabel
@@ -252,10 +277,15 @@ Item {
                 anchors.left: parent.left
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 20
-                anchors.rightMargin: 20
-                text: "test"
+                anchors.leftMargin: 20
+
                 z:2
                 checked: timeSlotEnable
+
+                onCheckedChanged: {
+                    timeSLotModelUnsorted.setProperty(index,"timeSlotEnable", checked)
+                    updateAppDataToFile()
+                }
 
             }
             background: Rectangle
@@ -281,7 +311,10 @@ Item {
         closePolicy: Popup.NoAutoClose || Popup.CloseOnEscape
         modal: true
 
-        property int repeatsIndex: timeSLotModelUnsorted.get(currentUnsortedIndex).repeat
+        property int repeatsIndex: 0
+        property bool isEditMode: false
+
+
 
 
         onAboutToShow:
@@ -297,6 +330,10 @@ Item {
             {
                 amPmTumbler.currentIndex = 1
             }
+
+            console.log("edit mode: " + isEditMode)
+            if (!isEditMode) repeatsIndex = 0
+            console.log("should LOAD FREEARSAD")
 
         }
 
@@ -494,13 +531,42 @@ Item {
                             }
 
                             border.width: 2
-                            color: timeSlotDialog.repeatsIndex & theBit ? "tomato" : "white"
+                            color:{
+
+                                if(timeSlotDialog.repeatsIndex & theBit)
+
+                                {
+                                    "tomato"
+
+                                }
+                                else
+                                {
+                                    "white"
+
+                                }
+
+                            }
+
 
                             MouseArea
                             {
                                 anchors.fill: parent
                                 onClicked:
                                 {
+
+                                    if(timeSlotDialog.repeatsIndex & theBit)
+
+                                    {
+                                        selected = true
+
+                                    }
+                                    else
+                                    {
+                                        selected = false
+
+                                    }
+
+
                                     if(selected)
                                     {
                                         selected = false
@@ -522,52 +588,6 @@ Item {
 
                     }
 
-                    ListModel{
-                        id: weekdaysModel
-                        ListElement{
-
-                            day: "Mon"
-                            theBit: 1
-                            selected: false
-                        }
-                        ListElement{
-
-                            day: "Tue"
-                            theBit: 2
-                            selected: false
-                        }
-                        ListElement{
-
-                            day: "Wed"
-                            theBit: 4
-                            selected: false
-                        }
-                        ListElement{
-
-                            day: "Thu"
-                            theBit: 8
-                            selected: false
-                        }
-                        ListElement{
-
-                            day: "Fri"
-                            theBit: 16
-                            selected: false
-                        }
-                        ListElement{
-
-                            day: "Sat"
-                            theBit: 32
-                            selected: false
-                        }
-                        ListElement{
-
-                            day: "Sun"
-                            theBit: 64
-                            selected: false
-                        }
-
-                    }
 
 
                 }
@@ -610,14 +630,28 @@ Item {
                     Button
                     {
                         text: "Cancel"
-
                         onClicked:
                         {
+                            if(timeSlotDialog.isEditMode)
+                            {
+
+                                timeSlotDialog.isEditMode = false
+
+                            }
+                            else
+                            {
+
+                                timeSLotModelUnsorted.remove(currentUnsortedIndex)
+                                currentUnsortedIndex = currentUnsortedIndex -1
+                                root.sortTimeSlotModel()
+                                root.updateAppDataToFile()
+                            }
+
                             timeSlotDialog.close()
-                            timeSLotModelUnsorted.remove(currentUnsortedIndex)
-                            currentUnsortedIndex = currentUnsortedIndex -1
-                            root.sortTimeSlotModel()
-                            root.updateAppDataToFile()
+
+                            autoModeGridView.currentItem.swipe.close()
+
+
                         }
 
 
@@ -625,20 +659,42 @@ Item {
 
                     Button
                     {
-                        text: "Add new"
+                        text: {
+
+                            if(timeSlotDialog.isEditMode)
+                            {
+                                "Edit"
+                            }
+                            else
+                            {
+                                "Add new"
+                            }
+                        }
+
+
 
 
                         onClicked: {
 
+                            if(timeSlotDialog.isEditMode)
+                            {
 
+                                timeSlotDialog.isEditMode = false
+
+                            }
+                            else
+
+                            {
+
+                                root.sortTimeSlotModel()
+
+                            }
                             timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"repeat", timeSlotDialog.repeatsIndex)
-
-                            timeSlotDialog.repeatsIndex = 0
                             timeSlotDialog.close()
-
-                            root.sortTimeSlotModel()
                             root.updateAppDataToFile()
 
+
+                            autoModeGridView.currentItem.swipe.close()
                         }
                     }
                 }
@@ -659,6 +715,53 @@ Item {
                 id: fontMetrics
             }
         }
+    }
+
+    ListModel{
+        id: weekdaysModel
+        ListElement{
+
+            day: "Mon"
+            theBit: 1
+            selected: false
+        }
+        ListElement{
+
+            day: "Tue"
+            theBit: 2
+            selected: false
+        }
+        ListElement{
+
+            day: "Wed"
+            theBit: 4
+            selected: false
+        }
+        ListElement{
+
+            day: "Thu"
+            theBit: 8
+            selected: false
+        }
+        ListElement{
+
+            day: "Fri"
+            theBit: 16
+            selected: false
+        }
+        ListElement{
+
+            day: "Sat"
+            theBit: 32
+            selected: false
+        }
+        ListElement{
+
+            day: "Sun"
+            theBit: 64
+            selected: false
+        }
+
     }
 
 }
