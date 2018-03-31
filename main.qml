@@ -18,6 +18,7 @@ ApplicationWindow {
 
                Row{
                    anchors.fill: parent
+                   spacing: 5
                    ToolButton {
                        id: toolButton
                        implicitHeight: 60
@@ -75,6 +76,8 @@ ApplicationWindow {
 
                         }
 
+
+
                        onClicked:
                        {
                            if(stackView.currentItem.objectName == "SetupModePage")
@@ -92,13 +95,41 @@ ApplicationWindow {
                        }
                        background: Rectangle
                        {
-                           width: 200
-                           height: toolButton.implicitHeight
+
+
+                           height: toolButton.implicitHeight * 0.7
+                           radius: 5
                            color: addNewProgramButton.pressed ? "tomato" : "white"
+                           anchors.verticalCenter: parent.verticalCenter
                        }
 
 
                    }
+
+                   ToolButton
+                   {
+                       text: "Test program"
+
+                       id: testProgramButton
+                       implicitHeight: 60
+                       font.pixelSize: Qt.application.font.pixelSize * 1.6
+                        visible: {
+                            if(stackView.currentItem.objectName == "SetupModePage") true
+                            else false
+
+                        }
+
+                        background: Rectangle
+                        {
+
+                            height: toolButton.implicitHeight * 0.7
+                            radius: 5
+                            color: testProgramButton.pressed ? "tomato" : "white"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                   }
+
+
 
                }
 
@@ -110,6 +141,57 @@ ApplicationWindow {
             anchors.centerIn: parent
             font.pixelSize: 20
         }
+
+        Rectangle
+        {
+            width: 50
+            height: toolButton.implicitHeight
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            color: serverStatusMouseArea.pressed? "tomato" : "transparent"
+
+            id: serverStatusIcon
+            Image
+            {
+                anchors.verticalCenter: parent.verticalCenter
+                source: "images/serverOffline.png"
+            }
+
+            MouseArea
+            {
+                id: serverStatusMouseArea
+                anchors.fill: parent
+
+
+                onClicked:
+                {
+                    svAddresDialog.open()
+                }
+
+
+            }
+
+        }
+
+        Rectangle
+        {
+            width: 50
+            height: toolButton.implicitHeight
+            anchors.right: parent.right
+            anchors.rightMargin: 40 + toolButton.implicitWidth
+            color: "transparent"
+
+            id: fountainStatusIcon
+            Image
+            {
+                anchors.verticalCenter: parent.verticalCenter
+                source: "images/fountainOffline.png"
+                scale: 0.8
+            }
+
+
+        }
+
     }
 
 
@@ -302,6 +384,8 @@ ApplicationWindow {
                        spacing: 20
                        anchors.fill: parent
                        Label {
+
+
                            elide: Label.ElideRight
                            text: "Please enter Program name:"
                            Layout.fillWidth: true
@@ -323,6 +407,48 @@ ApplicationWindow {
                    {
                        inputDialogTextField.text = ""
                        inputDialog.close()
+                   }
+               }
+
+    Dialog {
+                   id: svAddresDialog
+
+                   x: (parent.width - width) / 2
+                   y: (parent.height - height) / 2
+                   parent: Overlay.overlay
+
+                   focus: true
+                   modal: true
+                   title: "Server Address"
+                   standardButtons: Dialog.Ok | Dialog.Cancel
+
+                   ColumnLayout {
+                       spacing: 20
+                       anchors.fill: parent
+                       Label {
+
+
+                           elide: Label.ElideRight
+                           text: "Please enter Server address:"
+                           Layout.fillWidth: true
+                       }
+                       TextField {
+                           id: svAddressDialogTextField
+                           focus: true
+                           placeholderText:"Address..."
+                           Layout.fillWidth: true
+                       }
+
+                   }
+
+                   onAccepted:
+                      {
+                       stackView.currentItem.generateDefaultProgram(svAddressDialogTextField.text)
+                   }
+                   onDiscarded:
+                   {
+                       svAddresDialog.text = ""
+                       svAddresDialog.close()
                    }
                }
 }

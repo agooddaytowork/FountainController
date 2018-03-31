@@ -9,5 +9,7 @@
         <file>images/serverOffline.png</file>
         <file>images/serverOnline.png</file>
         <file>images/stop.png</file>
+        <file>images/fountainOffline.png</file>
+        <file>images/fountainOnline.png</file>
     </qresource>
 </RCC>
