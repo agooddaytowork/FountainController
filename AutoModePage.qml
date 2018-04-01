@@ -12,6 +12,8 @@ Item {
     property ListModel timeSLotModelUnsorted: ListModel {}
     property ListModel fountainProgramModel : ListModel {}
     property int currentUnsortedIndex: 0
+    property bool autoPlayFountain: false
+
 
 
     function serializeListModel(theList)
@@ -613,7 +615,7 @@ Item {
 
                             for (var i = 0; i < fountainProgramModel.count; i++)
                             {
-                                if(timeSLotModelUnsorted.get(currentIndex).program === fountainProgramModel.get(i).programName)
+                                if(timeSLotModelUnsorted.get(currentUnsortedIndex).program === fountainProgramModel.get(i).programName)
                                 {
                                     i
                                     return
@@ -668,7 +670,6 @@ Item {
 
                             autoModeGridView.currentItem.swipe.close()
 
-
                         }
 
 
@@ -687,9 +688,6 @@ Item {
                                 "Add new"
                             }
                         }
-
-
-
 
                         onClicked: {
 
@@ -713,6 +711,9 @@ Item {
 
 
                             autoModeGridView.currentItem.swipe.close()
+
+                            autoPlayTimer.toHour = false
+                            generateAutoPlayTimerInterval()
                         }
                     }
                 }
@@ -799,7 +800,7 @@ Item {
         property int currentIndexofPlayingTimeSlot: 0
         onTriggered:
         {
-
+           // VERY IMPORTANT SLOTTTTT
         }
     }
 
@@ -864,92 +865,103 @@ Item {
     function generateAutoPlayTimerInterval()
     {
         // stop the timer
-        autoPlayTimer.running = false
 
-        if(!autoPlayTimer.toHour)
+        autoPlayTimer.stop()
+        if(autoPlayFountain)
         {
-            //get today day of the weekdays
-            var theDay =  new Date().getDay()
-
-            console.log("the Day: " + theDay)
-
-            // get the Index of items in the TimeUnsorted model that has the timeslot to be played today
-
-            var theIndexArray = []
-            for(var i = 0 ; i < timeSLotModelUnsorted.count; i ++)
+            if(!autoPlayTimer.toHour)
             {
-                if (timeSLotModelUnsorted.get(i).repeat & getTheBitFromTodayIndex(theDay))
+                //get today day of the weekdays
+                var theDay =  new Date().getDay()
+
+                console.log("the Day: " + theDay)
+
+                // get the Index of items in the TimeUnsorted model that has the timeslot to be played today
+
+                var theIndexArray = []
+                for(var i = 0 ; i < timeSLotModelUnsorted.count; i ++)
                 {
-                    console.log("DZOO")
-                    theIndexArray.push(i)
-                }
-            }
-
-            if(theIndexArray.length == 0)
-            {
-                // notthing to be played today, check it when next day comme
-                var intervalToNextDay = nextDayWithHour(theDay+1, 0,1) - toMsecsSinceEpoch(new Date())
-
-                console.log("interValToNext Day: " + intervalToNextDay)
-                return
-            }
-
-            // compare the fromHour of all the items in theIndexArray, get the closet fromHour to the current time
-
-            var theTimeTobePlayed = 0;
-            var nothingTobePlayedToday = 1
-            console.log("the Index Array lenght: "+ theIndexArray.length)
-            for (i = 0; i < theIndexArray.length; i++)
-            {
-
-                var timeTobeCompared = nextDayWithHour(theDay, convertAMPMHourTo24HourFormat(timeSLotModelUnsorted.get(theIndexArray[i]).fromHour, timeSLotModelUnsorted.get(theIndexArray[i]).FromHourdayNightPeriod),timeSLotModelUnsorted.get(theIndexArray[i]).fromMinute)
-
-                console.log("the Time To Be compared: " + timeTobeCompared)
-
-
-                if(timeTobeCompared > toMsecsSinceEpoch(new Date()))
-                {
-                    if(theTimeTobePlayed === 0 )
+                    if (timeSLotModelUnsorted.get(i).repeat & getTheBitFromTodayIndex(theDay))
                     {
-                        theTimeTobePlayed = timeTobeCompared
+                        console.log("DZOO")
+                        theIndexArray.push(i)
                     }
-                    else
+                }
+                    var nothingTobePlayedToday = 1
+                if(theIndexArray.length != 0)
+                {
+                    // compare the fromHour of all the items in theIndexArray, get the closet fromHour to the current time
+
+                    var theTimeTobePlayed = 0;
+
+                    console.log("the Index Array lenght: "+ theIndexArray.length)
+                    for (i = 0; i < theIndexArray.length; i++)
                     {
-                        if( timeTobeCompared < theTimeTobePlayed)
+
+                        var timeTobeCompared = nextDayWithHour(theDay, convertAMPMHourTo24HourFormat(timeSLotModelUnsorted.get(theIndexArray[i]).fromHour, timeSLotModelUnsorted.get(theIndexArray[i]).FromHourdayNightPeriod),timeSLotModelUnsorted.get(theIndexArray[i]).fromMinute)
+
+                        console.log("the Time To Be compared: " + timeTobeCompared)
+
+
+                        if(timeTobeCompared > toMsecsSinceEpoch(new Date()))
                         {
-                            theTimeTobePlayed = timeTobeCompared
+                            if(theTimeTobePlayed === 0 )
+                            {
+                                theTimeTobePlayed = timeTobeCompared
+                            }
+                            else
+                            {
+                                if( timeTobeCompared < theTimeTobePlayed)
+                                {
+                                    theTimeTobePlayed = timeTobeCompared
+                                }
+                            }
+
+                            nothingTobePlayedToday = 0
+                            autoPlayTimer.currentIndexofPlayingTimeSlot = theIndexArray[i]
+                            autoPlayTimer.toHour = true
+
+                            console.log("Current INdex: " + autoPlayTimer.currentIndexofPlayingTimeSlot)
                         }
+
                     }
 
-                    nothingTobePlayedToday = 0
-                    autoPlayTimer.currentIndexofPlayingTimeSlot = theIndexArray[i]
-                    autoPlayTimer.toHour = true
-
-                    console.log("Current INdex: " + autoPlayTimer.currentIndexofPlayingTimeSlot)
                 }
 
+                if(nothingTobePlayedToday === 1)
+                {
+                    var intervalToNextDay = nextDayWithHour(theDay+1, 0,1) - toMsecsSinceEpoch(new Date())
 
+                    console.log("interValToNext Day: " + intervalToNextDay)
+                    autoPlayTimer.interval = intervalToNextDay
+                    autoPlayTimer.start()
+//                    autoPlayTimer.start()
+                    return
+                }
+
+                var theInterVal = (theTimeTobePlayed - toMsecsSinceEpoch(new Date()))
+
+                console.log("the Interval: " + theInterVal)
+                autoPlayTimer.interval = theInterVal
+                autoPlayTimer.start()
+                //        return theInterVal
             }
-
-            if(nothingTobePlayedToday === 1)
+            else
             {
-                intervalToNextDay = nextDayWithHour(theDay+1, 0,1) - toMsecsSinceEpoch(new Date())
+                autoPlayTimer.toHour = false
+                autoPlayTimer.interval = nextDayWithHour(new Date().getDay(),convertAMPMHourTo24HourFormat(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).toHour),timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).toMinute) - toMsecsSinceEpoch(new Date())
+                console.log("toInterval : " + autoPlayTimer.interval)
 
-                console.log("interValToNext Day: " + intervalToNextDay)
-                return
+                autoPlayTimer.start()
             }
-
-            var theInterVal = (theTimeTobePlayed - toMsecsSinceEpoch(new Date()))
-
-            console.log("the Interval: " + theInterVal)
-            //        return theInterVal
         }
-        else
-        {
-            autoPlayTimer.toHour = false
 
-            console.log("toInterval : " + (nextDayWithHour(new Date().getDay(),convertAMPMHourTo24HourFormat(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).toHour),timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).toMinute) - toMsecsSinceEpoch(new Date())))
-        }
+    }
+
+    onAutoPlayFountainChanged:
+    {
+        autoPlayTimer.toHour = false
+
     }
 
 

@@ -113,13 +113,15 @@ ApplicationWindow {
                        id: testProgramButton
                        implicitHeight: 60
                        font.pixelSize: Qt.application.font.pixelSize * 1.6
-//                        visible: {
-//                            if(stackView.currentItem.objectName == "SetupModePage") true
-//                            else false
+                        visible: {
+                            if(stackView.currentItem.objectName == "SetupModePage") true
+                            else false
 
-//                        }
+                        }
 
-                       visible: true
+//                       visible: true
+
+
 
                         background: Rectangle
                         {
@@ -132,7 +134,8 @@ ApplicationWindow {
 
                         onClicked:
                         {
-                            stackView.currentItem.generateAutoPlayTimerInterval()
+
+                            //stackView.currentItem.generateAutoPlayTimerInterval()
                         }
                    }
 
@@ -216,6 +219,7 @@ ApplicationWindow {
 
             Image
             {
+                id: playButtonImage
                 anchors.verticalCenter: parent.verticalCenter
                 source: "images/play.png"
                 scale: 0.8
@@ -228,7 +232,21 @@ ApplicationWindow {
 
                 onClicked:
                 {
+                    if(stackView.currentItem.autoPlayFountain == false)
+                    {
+                        playButtonImage.source = "images/stop.png"
+                        stackView.currentItem.autoPlayFountain = true
 
+                    }
+                    else
+                    {
+
+                        playButtonImage.source = "images/play.png"
+                        stackView.currentItem.autoPlayFountain = false
+                    }
+
+
+                    stackView.currentItem.generateAutoPlayTimerInterval()
                 }
 
             }
