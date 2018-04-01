@@ -10,7 +10,7 @@ Item {
 
     property bool openTimeSlotDialog: false
     property ListModel timeSLotModelUnsorted: ListModel {}
-    property ListModel timeSlotModelSorted : ListModel {}
+    property ListModel fountainProgramModel : ListModel {}
     property int currentUnsortedIndex: 0
 
 
@@ -48,7 +48,7 @@ Item {
                                          "ToHourdayNightPeriod": "AM",
                                          "timeSlotEnable": false,
                                          "repeat": 0,
-                                         "program": 1,
+                                         "program": "default",
                                          "description": "default program"
                                      })
 
@@ -110,6 +110,9 @@ Item {
             timeSLotModelUnsorted.clear()
             timeSLotModelUnsorted.append(JSON.parse(appIoManager.read("appData")))
         }
+
+        fountainProgramModel.clear()
+        fountainProgramModel.append(JSON.parse(dataIoManager.read("Data")))
     }
 
     GridView{
@@ -603,9 +606,23 @@ Item {
                     ComboBox
                     {
 
-                        model: 20
+                        id: programCombobox
+                        model: fountainProgramModel
+                        textRole: "programName"
+                        currentIndex: {
 
+                            for (var i = 0; i < fountainProgramModel.count; i++)
+                            {
+                                if(timeSLotModelUnsorted.get(currentIndex).program === fountainProgramModel.get(i).programName)
+                                {
+                                    i
+                                    return
+                                }
 
+                            }
+
+                            0
+                        }
                     }
                 }
 
@@ -690,6 +707,7 @@ Item {
 
                             }
                             timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"repeat", timeSlotDialog.repeatsIndex)
+                            timeSLotModelUnsorted.setProperty(currentUnsortedIndex,"program", programCombobox.currentText)
                             timeSlotDialog.close()
                             root.updateAppDataToFile()
 
