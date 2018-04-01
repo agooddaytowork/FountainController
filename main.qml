@@ -113,11 +113,13 @@ ApplicationWindow {
                        id: testProgramButton
                        implicitHeight: 60
                        font.pixelSize: Qt.application.font.pixelSize * 1.6
-                        visible: {
-                            if(stackView.currentItem.objectName == "SetupModePage") true
-                            else false
+//                        visible: {
+//                            if(stackView.currentItem.objectName == "SetupModePage") true
+//                            else false
 
-                        }
+//                        }
+
+                       visible: true
 
                         background: Rectangle
                         {
@@ -126,6 +128,11 @@ ApplicationWindow {
                             radius: 5
                             color: testProgramButton.pressed ? "tomato" : "white"
                             anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        onClicked:
+                        {
+                            stackView.currentItem.generateAutoPlayTimerInterval()
                         }
                    }
 
@@ -187,6 +194,43 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 source: "images/fountainOffline.png"
                 scale: 0.8
+            }
+
+
+        }
+        Rectangle
+        {
+            width: 50
+            height: toolButton.implicitHeight
+            anchors.left: parent.left
+            anchors.leftMargin: 225
+            color: playButtonMouseArea.pressed? "tomato" : "transparent"
+
+            id: playButton
+
+            visible:
+            {
+                if(stackView.currentItem.objectName == "AutoModePage") true
+                else false
+            }
+
+            Image
+            {
+                anchors.verticalCenter: parent.verticalCenter
+                source: "images/play.png"
+                scale: 0.8
+            }
+
+            MouseArea
+            {
+                id: playButtonMouseArea
+                anchors.fill: parent
+
+                onClicked:
+                {
+
+                }
+
             }
 
 

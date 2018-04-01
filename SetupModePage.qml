@@ -111,15 +111,6 @@ Item {
                                                         "fountainEnable": false},
                                                     {"fountainName": 6,
                                                         "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 7,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 8,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 9,
-                                                        "fountainProgram":1,
                                                         "fountainEnable": false}
 
 
@@ -142,18 +133,6 @@ Item {
                                                         "fountainProgram":1,
                                                         "fountainEnable": false},
                                                     {"fountainName": 5,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 6,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 7,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 8,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 9,
                                                         "fountainProgram":1,
                                                         "fountainEnable": false}
 
@@ -202,28 +181,6 @@ Item {
                                                         "fountainEnable": false},
                                                     {"fountainName": 2,
                                                         "fountainProgram":1,
-                                                        "fountainEnable": false},
-
-                                                    {"fountainName": 3,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 4,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 5,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 6,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 7,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 8,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 9,
-                                                        "fountainProgram":1,
                                                         "fountainEnable": false}
 
                                                 ]
@@ -250,15 +207,6 @@ Item {
                                                     {"fountainName": 6,
                                                         "fountainProgram":1,
                                                         "fountainEnable": false},
-                                                    {"fountainName": 7,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 8,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 9,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false}
 
 
                                                 ]
@@ -290,9 +238,6 @@ Item {
                                                         "fountainEnable": false},
                                                     {"fountainName": 8,
                                                         "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 9,
-                                                        "fountainProgram":1,
                                                         "fountainEnable": false}
 
 
@@ -313,21 +258,6 @@ Item {
                                                         "fountainEnable": false},
                                                     {"fountainName": 4,
                                                         "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 5,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 6,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 7,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 8,
-                                                        "fountainProgram":1,
-                                                        "fountainEnable": false},
-                                                    {"fountainName": 9,
-                                                        "fountainProgram":1,
                                                         "fountainEnable": false}
 
                                                 ]
@@ -341,7 +271,6 @@ Item {
                                                     {"fountainName": 2,
                                                         "fountainProgram":1,
                                                         "fountainEnable": false},
-
                                                     {"fountainName": 3,
                                                         "fountainProgram":1,
                                                         "fountainEnable": false},

@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
+import QtQml 2.2
 
 
 Item {
@@ -34,7 +35,6 @@ Item {
             timeSlotDialog.open()
         }
     }
-
 
     function generateDefaultTimeSLot()
     {
@@ -202,7 +202,7 @@ Item {
                 Label
                 {
                     id: fromHourLabel
-                    text: fromHour+"."+fromMinute+" "+FromHourdayNightPeriod+"-"+(toHour+1)+"."+toMinute+ " "+ ToHourdayNightPeriod
+                    text: fromHour+"."+fromMinute+" "+FromHourdayNightPeriod+"-"+(toHour)+"."+toMinute+ " "+ ToHourdayNightPeriod
                     font.pixelSize: 30
                 }
 
@@ -515,7 +515,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     Repeater
                     {
-                        id: weekdays
+                        id: weekdays1
                         model: weekdaysModel
                         //                        model: 7
 
@@ -723,45 +723,216 @@ Item {
 
             day: "Mon"
             theBit: 1
+            theIndex: 1
             selected: false
         }
         ListElement{
 
             day: "Tue"
             theBit: 2
+            theIndex: 2
             selected: false
         }
         ListElement{
 
             day: "Wed"
             theBit: 4
+            theIndex: 3
             selected: false
         }
         ListElement{
 
             day: "Thu"
             theBit: 8
+            theIndex: 4
             selected: false
         }
         ListElement{
 
             day: "Fri"
             theBit: 16
+            theIndex: 5
             selected: false
         }
         ListElement{
 
             day: "Sat"
             theBit: 32
+            theIndex: 6
             selected: false
         }
         ListElement{
 
             day: "Sun"
             theBit: 64
+            theIndex: 0
             selected: false
         }
 
     }
+
+    Timer
+    {
+        id: autoPlayTimer
+        interval: 5000
+        repeat: false
+        running: false
+        property bool toHour: false
+        property int currentIndexofPlayingTimeSlot: 0
+        onTriggered:
+        {
+
+        }
+    }
+
+    function toMsecsSinceEpoch(date) {
+        var msecs = date.getTime();
+        return msecs;
+    }
+
+    function nextDayWithHour(weekday, hour, minute)
+    {
+        var now = new Date();
+        now.setDate(now.getDate() + (weekday+(7-now.getDay())) % 7)
+        now.setHours(hour,minute,0,0)
+        console.log(now)
+        return toMsecsSinceEpoch(now);
+    }
+
+    function getTheBitFromTodayIndex(index)
+    {
+        var theBit;
+        switch(index)
+        {
+        case 0:
+            theBit = 64
+            break;
+        case 1:
+            theBit = 1
+            break;
+        case 2:
+            theBit = 2
+            break;
+        case 3:
+            theBit = 4
+            break;
+        case 4:
+            theBit = 8
+            break;
+        case 5:
+            theBit = 16
+            break;
+        case 6:
+            theBit = 32
+            break;
+
+        }
+
+        return theBit
+    }
+
+    function convertAMPMHourTo24HourFormat(hour, dayPeriod)
+    {
+        if(dayPeriod === "AM")
+        {
+            return hour
+        }
+        else
+        {
+            return hour + 12
+        }
+    }
+
+    function generateAutoPlayTimerInterval()
+    {
+        // stop the timer
+        autoPlayTimer.running = false
+
+        if(!autoPlayTimer.toHour)
+        {
+            //get today day of the weekdays
+            var theDay =  new Date().getDay()
+
+            console.log("the Day: " + theDay)
+
+            // get the Index of items in the TimeUnsorted model that has the timeslot to be played today
+
+            var theIndexArray = []
+            for(var i = 0 ; i < timeSLotModelUnsorted.count; i ++)
+            {
+                if (timeSLotModelUnsorted.get(i).repeat & getTheBitFromTodayIndex(theDay))
+                {
+                    console.log("DZOO")
+                    theIndexArray.push(i)
+                }
+            }
+
+            if(theIndexArray.length == 0)
+            {
+                // notthing to be played today, check it when next day comme
+                var intervalToNextDay = nextDayWithHour(theDay+1, 0,1) - toMsecsSinceEpoch(new Date())
+
+                console.log("interValToNext Day: " + intervalToNextDay)
+                return
+            }
+
+            // compare the fromHour of all the items in theIndexArray, get the closet fromHour to the current time
+
+            var theTimeTobePlayed = 0;
+            var nothingTobePlayedToday = 1
+            console.log("the Index Array lenght: "+ theIndexArray.length)
+            for (i = 0; i < theIndexArray.length; i++)
+            {
+
+                var timeTobeCompared = nextDayWithHour(theDay, convertAMPMHourTo24HourFormat(timeSLotModelUnsorted.get(theIndexArray[i]).fromHour, timeSLotModelUnsorted.get(theIndexArray[i]).FromHourdayNightPeriod),timeSLotModelUnsorted.get(theIndexArray[i]).fromMinute)
+
+                console.log("the Time To Be compared: " + timeTobeCompared)
+
+
+                if(timeTobeCompared > toMsecsSinceEpoch(new Date()))
+                {
+                    if(theTimeTobePlayed === 0 )
+                    {
+                        theTimeTobePlayed = timeTobeCompared
+                    }
+                    else
+                    {
+                        if( timeTobeCompared < theTimeTobePlayed)
+                        {
+                            theTimeTobePlayed = timeTobeCompared
+                        }
+                    }
+
+                    nothingTobePlayedToday = 0
+                    autoPlayTimer.currentIndexofPlayingTimeSlot = theIndexArray[i]
+                    autoPlayTimer.toHour = true
+
+                    console.log("Current INdex: " + autoPlayTimer.currentIndexofPlayingTimeSlot)
+                }
+
+
+            }
+
+            if(nothingTobePlayedToday === 1)
+            {
+                intervalToNextDay = nextDayWithHour(theDay+1, 0,1) - toMsecsSinceEpoch(new Date())
+
+                console.log("interValToNext Day: " + intervalToNextDay)
+                return
+            }
+
+            var theInterVal = (theTimeTobePlayed - toMsecsSinceEpoch(new Date()))
+
+            console.log("the Interval: " + theInterVal)
+            //        return theInterVal
+        }
+        else
+        {
+            autoPlayTimer.toHour = false
+
+            console.log("toInterval : " + (nextDayWithHour(new Date().getDay(),convertAMPMHourTo24HourFormat(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).toHour),timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).toMinute) - toMsecsSinceEpoch(new Date())))
+        }
+    }
+
 
 }
