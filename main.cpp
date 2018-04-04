@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include "fileio.h"
 #include <QQmlContext>
+#include "fountainserial.h"
+
 int main(int argc, char *argv[])
 {
 #if defined(Q_OS_WIN)
@@ -14,6 +16,10 @@ int main(int argc, char *argv[])
 
     FileIO appIoManager("App");
     FileIO dataIoManager("Data");
+
+    fountainSerial aTest;
+
+    aTest.serializedProgram("Test 1");
 
       QQmlContext *thisContext = engine.rootContext();
     thisContext->setContextProperty("appIoManager", &appIoManager);

@@ -30,7 +30,7 @@ class fountainSerial : public QObject
 
     void setEnableFountainInGroup(const QJsonObject &data);
     void setGroupID(const quint16 &id);
-    void setProgramData(const QJsonObject &data);
+    void setProgramData(QJsonObject data);
     QByteArray generateSerializedByteArray();
 
 public:

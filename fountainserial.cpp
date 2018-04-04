@@ -1,5 +1,22 @@
 #include "fountainserial.h"
 
+QByteArray &operator<<(QByteArray &l, quint8 r)
+{
+    l.append(r);
+    return l;
+}
+
+QByteArray &operator<<(QByteArray &l, quint16 r)
+{
+    return l<<quint8(r>>8)<<quint8(r);
+}
+
+QByteArray &operator<<(QByteArray &l, quint32 r)
+{
+    return l<<quint16(r>>16)<<quint16(r);
+}
+
+
 fountainSerial::fountainSerial(QObject *parent): QObject(parent), m_GroupIDandEnable(0), m_GroupSyncing(false)
 {
     m_ProgramData.clear();
@@ -11,9 +28,12 @@ QByteArray fountainSerial::serializedProgram(const QString &programName)
 {
     FileIO dataIoManager("Data");
 
-    QJsonDocument aJsonDocument;
+    QByteArray aData;
 
-    aJsonDocument.fromJson(dataIoManager.read("Data").toUtf8());
+    aData.append(dataIoManager.read("Data"));
+
+    QJsonDocument aJsonDocument(QJsonDocument::fromJson(aData));
+    //    aJsonDocument.fromJson(aData);
 
     QJsonArray programArray = aJsonDocument.array();
 
@@ -25,19 +45,44 @@ QByteArray fountainSerial::serializedProgram(const QString &programName)
 
             for(int i = 0; i < theProgram.toObject()["groups"].toArray().count(); i++)
             {
+                m_GroupSyncing = true;
 
                 if(theProgram.toObject()["groups"].toArray().at(i)["fountainGroupEnable"].toBool() == true)
                 {
-                    m_GroupSyncing = true;
+
                     resetGroupIdandEnable();
                     setGroupID(intToFountainGroupIDBitBang.value(i));
-                    setEnableFountainInGroup(theFountainGroup.toObject());
-                    setProgramData(theFountainGroup.toObject());
-                    m_serialPackage.insert(i, generateSerializedByteArray());
-                }
+                    setEnableFountainInGroup(theProgram.toObject()["groups"].toArray().at(i).toObject());
+                    setProgramData(theProgram.toObject()["groups"].toArray().at(i).toObject());
 
+                }
+                else
+                {
+                    resetGroupIdandEnable();
+                    setGroupID(intToFountainGroupIDBitBang.value(i));
+
+                    for(int ii =0; ii < m_fountainNumber; ii++)
+                    {
+                        m_ProgramData.append(m_dummyProgramNo);
+                    }
+                }
+                m_serialPackage.insert(i, generateSerializedByteArray());
+
+
+
+                qDebug() << m_serialPackage.count();
             }
 
+            QByteArray test;
+
+            test << m_startFlag;
+            foreach (QByteArray member, m_serialPackage) {
+
+                test.append(member);
+            }
+
+            test << m_endFlag;
+            qDebug() << test;
         }
 
     }
@@ -50,7 +95,8 @@ QByteArray fountainSerial::generateSerializedByteArray()
     QByteArray output;
 
     if(!m_GroupSyncing) output.append(m_startFlag);
-    output.append(m_GroupIDandEnable);
+    output<<m_GroupIDandEnable;
+
     output.append(m_ProgramData);
     if(!m_GroupSyncing) output.append(m_endFlag);
 
@@ -58,7 +104,7 @@ QByteArray fountainSerial::generateSerializedByteArray()
     return output;
 }
 
-void fountainSerial::setProgramData(const QJsonObject &data)
+void fountainSerial::setProgramData( QJsonObject data)
 {
     int i = 0;
 
@@ -73,6 +119,7 @@ void fountainSerial::setProgramData(const QJsonObject &data)
     while(i < m_fountainNumber)
     {
         m_ProgramData.append(m_dummyProgramNo);
+        i++;
     }
 }
 

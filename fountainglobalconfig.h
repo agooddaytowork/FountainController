@@ -4,6 +4,12 @@
 #endif // FOUNTAINGLOBALCONFIG_H
 #define fountainSerialDebug (1)
 #include <QCoreApplication>
+
+QByteArray &operator<<(QByteArray &l, quint8 r);
+
+QByteArray &operator<<(QByteArray &l, quint16 r);
+
+QByteArray &operator<<(QByteArray &l, quint32 r);
 enum fountainBitBang
 {
     fountain1 = 0b0000000000000001,
