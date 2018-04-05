@@ -134,8 +134,7 @@ ApplicationWindow {
 
                         onClicked:
                         {
-
-                            //stackView.currentItem.generateAutoPlayTimerInterval()
+                            stackView.currentItem.testProgram()
                         }
                    }
 

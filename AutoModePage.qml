@@ -801,6 +801,17 @@ Item {
         onTriggered:
         {
            // VERY IMPORTANT SLOTTTTT
+
+            if(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).timeSlotEnable)
+            {
+                console.log("PROGRAM TO BE PLAYED: " + timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program)
+
+                var serialData = fountainProgramSerializer.serializedProgram(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program)
+
+                console.log(serialData)
+            }
+
+            generateAutoPlayTimerInterval()
         }
     }
 
@@ -908,17 +919,19 @@ Item {
                             if(theTimeTobePlayed === 0 )
                             {
                                 theTimeTobePlayed = timeTobeCompared
+                                autoPlayTimer.currentIndexofPlayingTimeSlot = theIndexArray[i]
                             }
                             else
                             {
                                 if( timeTobeCompared < theTimeTobePlayed)
                                 {
                                     theTimeTobePlayed = timeTobeCompared
+                                    autoPlayTimer.currentIndexofPlayingTimeSlot = theIndexArray[i]
                                 }
                             }
 
                             nothingTobePlayedToday = 0
-                            autoPlayTimer.currentIndexofPlayingTimeSlot = theIndexArray[i]
+
                             autoPlayTimer.toHour = true
 
                             console.log("Current INdex: " + autoPlayTimer.currentIndexofPlayingTimeSlot)

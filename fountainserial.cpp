@@ -68,9 +68,6 @@ QByteArray fountainSerial::serializedProgram(const QString &programName)
                 }
                 m_serialPackage.insert(i, generateSerializedByteArray());
 
-
-
-                qDebug() << m_serialPackage.count();
             }
 
             QByteArray test;
@@ -82,7 +79,13 @@ QByteArray fountainSerial::serializedProgram(const QString &programName)
             }
 
             test << m_endFlag;
+
+
+#if fountainSerialDebug
             qDebug() << test;
+#endif
+
+            return test;
         }
 
     }

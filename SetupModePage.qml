@@ -11,6 +11,12 @@ Item {
 
     property ListModel fountainProgramModel: ListModel {}
 
+    function testProgram()
+    {
+        var serialData = fountainProgramSerializer.serializedProgram(fountainProgramModel.get(programList.currentIndex).programName)
+        console.log(serialData)
+    }
+
     function updateProgramToTextFile()
     {
         dataIoManager.write("Data", root.serializeListModelForSetupPage(fountainProgramModel))

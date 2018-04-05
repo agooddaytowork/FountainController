@@ -17,13 +17,12 @@ int main(int argc, char *argv[])
     FileIO appIoManager("App");
     FileIO dataIoManager("Data");
 
-    fountainSerial aTest;
-
-    aTest.serializedProgram("Test 1");
+    fountainSerial fountainProgramSerializer;
 
       QQmlContext *thisContext = engine.rootContext();
     thisContext->setContextProperty("appIoManager", &appIoManager);
     thisContext->setContextProperty("dataIoManager", &dataIoManager);
+    thisContext->setContextProperty("fountainProgramSerializer", &fountainProgramSerializer);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
