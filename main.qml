@@ -14,133 +14,133 @@ ApplicationWindow {
 
 
     header: ToolBar {
-               contentHeight: toolButton.implicitHeight
+        contentHeight: toolButton.implicitHeight
 
-               Row{
-                   anchors.fill: parent
-                   spacing: 5
-                   ToolButton {
-                       id: toolButton
-                       implicitHeight: 60
-                       text: stackView.depth > 1 ? "\u25C0" : "\u2630"
-                       font.pixelSize: Qt.application.font.pixelSize * 1.6
+        Row{
+            anchors.fill: parent
+            spacing: 5
+            ToolButton {
+                id: toolButton
+                implicitHeight: 60
+                text: stackView.depth > 1 ? "\u25C0" : "\u2630"
+                font.pixelSize: Qt.application.font.pixelSize * 1.6
 
-                       onClicked: optionsMenu.open()
+                onClicked: optionsMenu.open()
 
-                       Menu {
-                           id: optionsMenu
-                           x: parent.width - width
-                           transformOrigin: Menu.TopRight
+                Menu {
+                    id: optionsMenu
+                    x: parent.width - width
+                    transformOrigin: Menu.TopRight
 
-                           MenuItem {
-                               text: "Setup Mode"
-                               font.pixelSize: 16
-                               onTriggered: {
-                                stackView.push(Qt.resolvedUrl("SetupModePage.qml")/*, {"fountainProgramModel": testModel}*/)
-
-                               }
-
-                           }
-                           MenuItem {
-                               text: "Auto Mode"
-                               font.pixelSize: 16
-                               onTriggered:{
-
-                                   stackView.push(Qt.resolvedUrl("AutoModePage.qml"))
-                                   console.log("Auto mode page")
-                               }
-
-                           }
-                           MenuItem {
-                               text: "Manual Mode"
-                               font.pixelSize: 16
-                               onTriggered: {
-
-                                   stackView.push(Qt.resolvedUrl("ManualModePage.qml"))
-                                   console.log("Manual Mode page")
-                               }
-
-                           }
-                       }
-                   }
-
-                   ToolButton
-                   {
-                       text: "Thêm chương trình"
-                       id: addNewProgramButton
-                       implicitHeight: 60
-                       font.pixelSize: Qt.application.font.pixelSize * 1.6
-                        visible: {
-                            if(stackView.currentItem.objectName == "SetupModePage" || stackView.currentItem.objectName == "AutoModePage") true
-                            else false
+                    MenuItem {
+                        text: "Setup Mode"
+                        font.pixelSize: 16
+                        onTriggered: {
+                            stackView.push(Qt.resolvedUrl("SetupModePage.qml")/*, {"fountainProgramModel": testModel}*/)
 
                         }
 
+                    }
+                    MenuItem {
+                        text: "Auto Mode"
+                        font.pixelSize: 16
+                        onTriggered:{
 
-
-                       onClicked:
-                       {
-                           if(stackView.currentItem.objectName == "SetupModePage")
-                           {
-                                inputDialog.open()
-
-                           }
-                           else if(stackView.currentItem.objectName == "AutoModePage")
-                           {
-
-
-                               stackView.currentItem.openTimeSlotDialog = true
-
-                           }
-                       }
-                       background: Rectangle
-                       {
-
-
-                           height: toolButton.implicitHeight * 0.7
-                           radius: 5
-                           color: addNewProgramButton.pressed ? "tomato" : "white"
-                           anchors.verticalCenter: parent.verticalCenter
-                       }
-
-
-                   }
-
-                   ToolButton
-                   {
-                       text: "Test program"
-
-                       id: testProgramButton
-                       implicitHeight: 60
-                       font.pixelSize: Qt.application.font.pixelSize * 1.6
-                        visible: {
-                            if(stackView.currentItem.objectName == "SetupModePage") true
-                            else false
-
+                            stackView.push(Qt.resolvedUrl("AutoModePage.qml"))
+                            console.log("Auto mode page")
                         }
 
-//                       visible: true
+                    }
+                    MenuItem {
+                        text: "Manual Mode"
+                        font.pixelSize: 16
+                        onTriggered: {
 
-
-
-                        background: Rectangle
-                        {
-
-                            height: toolButton.implicitHeight * 0.7
-                            radius: 5
-                            color: testProgramButton.pressed ? "tomato" : "white"
-                            anchors.verticalCenter: parent.verticalCenter
+                            stackView.push(Qt.resolvedUrl("ManualModePage.qml"))
+                            console.log("Manual Mode page")
                         }
 
-                        onClicked:
-                        {
-                            stackView.currentItem.testProgram()
-                        }
-                   }
+                    }
+                }
+            }
+
+            ToolButton
+            {
+                text: "Thêm chương trình"
+                id: addNewProgramButton
+                implicitHeight: 60
+                font.pixelSize: Qt.application.font.pixelSize * 1.6
+                visible: {
+                    if(stackView.currentItem.objectName == "SetupModePage" || stackView.currentItem.objectName == "AutoModePage") true
+                    else false
+
+                }
 
 
 
-               }
+                onClicked:
+                {
+                    if(stackView.currentItem.objectName == "SetupModePage")
+                    {
+                        inputDialog.open()
+
+                    }
+                    else if(stackView.currentItem.objectName == "AutoModePage")
+                    {
+
+
+                        stackView.currentItem.openTimeSlotDialog = true
+
+                    }
+                }
+                background: Rectangle
+                {
+
+
+                    height: toolButton.implicitHeight * 0.7
+                    radius: 5
+                    color: addNewProgramButton.pressed ? "tomato" : "white"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+
+            }
+
+            ToolButton
+            {
+                text: "Test program"
+
+                id: testProgramButton
+                implicitHeight: 60
+                font.pixelSize: Qt.application.font.pixelSize * 1.6
+                visible: {
+                    if(stackView.currentItem.objectName == "SetupModePage") true
+                    else false
+
+                }
+
+                //                       visible: true
+
+
+
+                background: Rectangle
+                {
+
+                    height: toolButton.implicitHeight * 0.7
+                    radius: 5
+                    color: testProgramButton.pressed ? "tomato" : "white"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                onClicked:
+                {
+                    stackView.currentItem.testProgram()
+                }
+            }
+
+
+
+        }
 
 
         Label
@@ -162,8 +162,10 @@ ApplicationWindow {
             id: serverStatusIcon
             Image
             {
+                id: svStatusImage
                 anchors.verticalCenter: parent.verticalCenter
-                source: "images/serverOffline.png"
+                source: theTcpClient.isSVOnline ? "images/serverOnline.png" : "images/serverOffline.png"
+
             }
 
             MouseArea
@@ -283,233 +285,266 @@ ApplicationWindow {
 
     ListModel {
         id: testModel
-            ListElement{
-                programName: "chương trình 1"
-                groups:[
-                    ListElement
-                    {
-                        groupName: "tủ điện 1"
-                        fountainGroupEnable: false
-                        fountains:[
-                            ListElement
-                            {
-                                fountainName: 1
-                                fountainProgram: 5
-                                fountainEnable: true
-                            },
-                            ListElement
-                            {
-                                fountainName: 2
-                                fountainProgram: 5
-                                fountainEnable: false
-                            },
-                            ListElement
-                            {
-                                fountainName: 3
-                                fountainProgram: 5
-                                fountainEnable: true
-                            },
-                            ListElement
-                            {
-                                fountainName: 4
-                                fountainProgram: 5
-                                fountainEnable: false
-                            },
-                            ListElement
-                            {
-                                fountainName: 5
-                                fountainProgram: 5
-                                fountainEnable: true
-                            },
-                            ListElement
-                            {
-                                fountainName: 6
-                                fountainProgram: 5
-                                fountainEnable: false
-                            }
-                            ,
-                            ListElement
-                            {
-                                fountainName: 7
-                                fountainProgram: 5
-                                fountainEnable: true
-                            },
-                            ListElement
-                            {
-                                fountainName: 8
-                                fountainProgram: 5
-                                fountainEnable: false
-                            },
-                            ListElement
-                            {
-                                fountainName: 9
-                                fountainProgram: 5
-                                fountainEnable: false
-                            }
-                        ]
-                    },
-                    ListElement
-                    {
-                        groupName: "tủ điện 2"
-                        fountainGroupEnable: true
-                        fountains:[
-                            ListElement
-                            {
-                                fountainName: 1
-                                fountainProgram: 5
-                                fountainEnable: true
-                            },
-                            ListElement
-                            {
-                                fountainName: 2
-                                fountainProgram: 2
-                                fountainEnable: false
-                            },
-                            ListElement
-                            {
-                                fountainName: 3
-                                fountainProgram: 4
-                                fountainEnable: true
-                            },
-                            ListElement
-                            {
-                                fountainName: 4
-                                fountainProgram: 5
-                                fountainEnable: false
-                            },
-                            ListElement
-                            {
-                                fountainName: 5
-                                fountainProgram: 5
-                                fountainEnable: true
-                            },
-                            ListElement
-                            {
-                                fountainName: 6
-                                fountainProgram: 5
-                                fountainEnable: false
-                            }
-                            ,
-                            ListElement
-                            {
-                                fountainName: 7
-                                fountainProgram: 5
-                                fountainEnable: true
-                            },
-                            ListElement
-                            {
-                                fountainName: 8
-                                fountainProgram: 5
-                                fountainEnable: false
-                            },
-                            ListElement
-                            {
-                                fountainName: 9
-                                fountainProgram: 5
-                                fountainEnable: false
-                            }
-                        ]
-                    }]
+        ListElement{
+            programName: "chương trình 1"
+            groups:[
+                ListElement
+                {
+                    groupName: "tủ điện 1"
+                    fountainGroupEnable: false
+                    fountains:[
+                        ListElement
+                        {
+                            fountainName: 1
+                            fountainProgram: 5
+                            fountainEnable: true
+                        },
+                        ListElement
+                        {
+                            fountainName: 2
+                            fountainProgram: 5
+                            fountainEnable: false
+                        },
+                        ListElement
+                        {
+                            fountainName: 3
+                            fountainProgram: 5
+                            fountainEnable: true
+                        },
+                        ListElement
+                        {
+                            fountainName: 4
+                            fountainProgram: 5
+                            fountainEnable: false
+                        },
+                        ListElement
+                        {
+                            fountainName: 5
+                            fountainProgram: 5
+                            fountainEnable: true
+                        },
+                        ListElement
+                        {
+                            fountainName: 6
+                            fountainProgram: 5
+                            fountainEnable: false
+                        }
+                        ,
+                        ListElement
+                        {
+                            fountainName: 7
+                            fountainProgram: 5
+                            fountainEnable: true
+                        },
+                        ListElement
+                        {
+                            fountainName: 8
+                            fountainProgram: 5
+                            fountainEnable: false
+                        },
+                        ListElement
+                        {
+                            fountainName: 9
+                            fountainProgram: 5
+                            fountainEnable: false
+                        }
+                    ]
+                },
+                ListElement
+                {
+                    groupName: "tủ điện 2"
+                    fountainGroupEnable: true
+                    fountains:[
+                        ListElement
+                        {
+                            fountainName: 1
+                            fountainProgram: 5
+                            fountainEnable: true
+                        },
+                        ListElement
+                        {
+                            fountainName: 2
+                            fountainProgram: 2
+                            fountainEnable: false
+                        },
+                        ListElement
+                        {
+                            fountainName: 3
+                            fountainProgram: 4
+                            fountainEnable: true
+                        },
+                        ListElement
+                        {
+                            fountainName: 4
+                            fountainProgram: 5
+                            fountainEnable: false
+                        },
+                        ListElement
+                        {
+                            fountainName: 5
+                            fountainProgram: 5
+                            fountainEnable: true
+                        },
+                        ListElement
+                        {
+                            fountainName: 6
+                            fountainProgram: 5
+                            fountainEnable: false
+                        }
+                        ,
+                        ListElement
+                        {
+                            fountainName: 7
+                            fountainProgram: 5
+                            fountainEnable: true
+                        },
+                        ListElement
+                        {
+                            fountainName: 8
+                            fountainProgram: 5
+                            fountainEnable: false
+                        },
+                        ListElement
+                        {
+                            fountainName: 9
+                            fountainProgram: 5
+                            fountainEnable: false
+                        }
+                    ]
+                }]
 
+        }
+        ListElement{
+            programName: "chương trình 2"
+            groups:[
+                ListElement
+                {
+                    groupName: "tủ điện 3"
+                    fountainGroupEnable: true
+                },
+                ListElement
+                {
+                    groupName: "tủ điện 4"
+                    fountainGroupEnable: false
+                }]
+
+        }
+    }
+
+    Dialog {
+        id: inputDialog
+
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        parent: Overlay.overlay
+
+        focus: true
+        modal: true
+        title: "Input"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        ColumnLayout {
+            spacing: 20
+            anchors.fill: parent
+            Label {
+
+
+                elide: Label.ElideRight
+                text: "Please enter Program name:"
+                Layout.fillWidth: true
             }
-            ListElement{
-                programName: "chương trình 2"
-                groups:[
-                    ListElement
-                    {
-                        groupName: "tủ điện 3"
-                        fountainGroupEnable: true
-                    },
-                    ListElement
-                    {
-                        groupName: "tủ điện 4"
-                        fountainGroupEnable: false
-                    }]
+            TextField {
+                id: inputDialogTextField
+                focus: true
+                placeholderText: "Program name"
+                Layout.fillWidth: true
+            }
 
+        }
+
+        onAccepted:
+        {
+            stackView.currentItem.generateDefaultProgram(inputDialogTextField.text)
+        }
+        onDiscarded:
+        {
+            inputDialogTextField.text = ""
+            inputDialog.close()
+        }
+    }
+
+    Dialog {
+        id: svAddresDialog
+
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        parent: Overlay.overlay
+
+        focus: true
+        modal: true
+        title: "Server"
+        standardButtons:
+
+        {
+            if(!theTcpClient.isSVOnline)
+            {
+                Dialog.Ok | Dialog.Cancel
+            }
+
+            else
+            {
+                Dialog.Cancel
             }
         }
 
-    Dialog {
-                   id: inputDialog
 
-                   x: (parent.width - width) / 2
-                   y: (parent.height - height) / 2
-                   parent: Overlay.overlay
-
-                   focus: true
-                   modal: true
-                   title: "Input"
-                   standardButtons: Dialog.Ok | Dialog.Cancel
-
-                   ColumnLayout {
-                       spacing: 20
-                       anchors.fill: parent
-                       Label {
+        ColumnLayout {
+            spacing: 20
+            anchors.fill: parent
 
 
-                           elide: Label.ElideRight
-                           text: "Please enter Program name:"
-                           Layout.fillWidth: true
-                       }
-                       TextField {
-                           id: inputDialogTextField
-                           focus: true
-                           placeholderText: "Program name"
-                           Layout.fillWidth: true
-                       }
+            Button{
+                id: disconnectToServerButton
+                text: "Disconnect to server"
 
-                   }
+                visible: theTcpClient.isSVOnline
+                onClicked: {
+                    theTcpClient.disconnect()
 
-                   onAccepted:
-                      {
-                       stackView.currentItem.generateDefaultProgram(inputDialogTextField.text)
-                   }
-                   onDiscarded:
-                   {
-                       inputDialogTextField.text = ""
-                       inputDialog.close()
-                   }
-               }
+                }
 
-    Dialog {
-                   id: svAddresDialog
-
-                   x: (parent.width - width) / 2
-                   y: (parent.height - height) / 2
-                   parent: Overlay.overlay
-
-                   focus: true
-                   modal: true
-                   title: "Server Address"
-                   standardButtons: Dialog.Ok | Dialog.Cancel
-
-                   ColumnLayout {
-                       spacing: 20
-                       anchors.fill: parent
-                       Label {
+            }
+            Label {
 
 
-                           elide: Label.ElideRight
-                           text: "Please enter Server address:"
-                           Layout.fillWidth: true
-                       }
-                       TextField {
-                           id: svAddressDialogTextField
-                           focus: true
-                           placeholderText:"Address..."
-                           Layout.fillWidth: true
-                       }
+                elide: Label.ElideRight
+                visible: !theTcpClient.isSVOnline
+                text: "Please enter Server address:"
+                Layout.fillWidth: true
+            }
+            TextField {
+                id: svAddressDialogTextField
+                visible: !theTcpClient.isSVOnline
+                focus: true
+                placeholderText:"Address..."
+                Layout.fillWidth: true
+            }
 
-                   }
+        }
 
-                   onAccepted:
-                      {
-                       stackView.currentItem.generateDefaultProgram(svAddressDialogTextField.text)
-                   }
-                   onDiscarded:
-                   {
-                       svAddresDialog.text = ""
-                       svAddresDialog.close()
-                   }
-               }
+        onAccepted:
+        {
+            if(!theTcpClient.isSVOnline)
+            {
+                theTcpClient.connect(svAddressDialogTextField.text, 8080)
+            }
+
+
+        }
+        onDiscarded:
+        {
+            svAddresDialog.text = ""
+            svAddresDialog.close()
+        }
+    }
 }

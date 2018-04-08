@@ -2,7 +2,7 @@
 #define FOUNTAINGLOBALCONFIG_H
 
 #endif // FOUNTAINGLOBALCONFIG_H
-#define fountainSerialDebug (0)
+#define fountainSerialDebug (1)
 #include <QCoreApplication>
 
 QByteArray &operator<<(QByteArray &l, quint8 r);

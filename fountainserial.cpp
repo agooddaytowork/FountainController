@@ -61,6 +61,7 @@ QByteArray fountainSerial::serializedProgram(const QString &programName)
                     resetGroupIdandEnable();
                     setGroupID(intToFountainGroupIDBitBang.value(i));
 
+                    m_ProgramData.clear();
                     for(int ii =0; ii < m_fountainNumber; ii++)
                     {
                         m_ProgramData.append(m_dummyProgramNo);
@@ -82,6 +83,7 @@ QByteArray fountainSerial::serializedProgram(const QString &programName)
 
 
 #if fountainSerialDebug
+            qDebug() << "Message length: " + test.length();
             qDebug() << test;
 #endif
 

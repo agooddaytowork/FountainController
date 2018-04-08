@@ -809,6 +809,11 @@ Item {
                 var serialData = fountainProgramSerializer.serializedProgram(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program)
 
                 console.log(serialData)
+
+                if(theTcpClient.isSVOnline)
+                {
+                    theTcpClient.sendProgram(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program,serialData)
+                }
             }
 
             generateAutoPlayTimerInterval()
@@ -951,7 +956,6 @@ Item {
 //                    autoPlayTimer.start()
                     return
                 }
-
                 var theInterVal = (theTimeTobePlayed - toMsecsSinceEpoch(new Date()))
 
                 console.log("the Interval: " + theInterVal)

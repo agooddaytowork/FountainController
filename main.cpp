@@ -3,6 +3,8 @@
 #include "fileio.h"
 #include <QQmlContext>
 #include "fountainserial.h"
+#include "fountainclient.h"
+#include <QStandardPaths>
 
 int main(int argc, char *argv[])
 {
@@ -17,12 +19,16 @@ int main(int argc, char *argv[])
     FileIO appIoManager("App");
     FileIO dataIoManager("Data");
 
+//    qDebug()<< QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
     fountainSerial fountainProgramSerializer;
+    fountainClient aClient;
 
       QQmlContext *thisContext = engine.rootContext();
     thisContext->setContextProperty("appIoManager", &appIoManager);
     thisContext->setContextProperty("dataIoManager", &dataIoManager);
     thisContext->setContextProperty("fountainProgramSerializer", &fountainProgramSerializer);
+    thisContext->setContextProperty("theTcpClient", &aClient);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

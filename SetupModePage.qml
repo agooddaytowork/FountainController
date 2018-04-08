@@ -13,8 +13,13 @@ Item {
 
     function testProgram()
     {
-        var serialData = fountainProgramSerializer.serializedProgram(fountainProgramModel.get(programList.currentIndex).programName)
+        var serialData = fountainProgramSerializer.serializedProgram(fountainProgramModel.get(programIndex).programName)
         console.log(serialData)
+
+        if(theTcpClient.isSVOnline)
+        {
+            theTcpClient.sendProgram(fountainProgramModel.get(programIndex).programName,serialData)
+        }
     }
 
     function updateProgramToTextFile()

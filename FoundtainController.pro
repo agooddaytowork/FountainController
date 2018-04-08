@@ -1,4 +1,4 @@
-QT += quick
+QT += quick network
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -14,7 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     fileio.cpp \
-    fountainserial.cpp
+    fountainserial.cpp \
+    fountainclient.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,4 +33,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     fileio.h \
     fountainserial.h \
-    fountainglobalconfig.h
+    fountainglobalconfig.h \
+    fountainclient.h
