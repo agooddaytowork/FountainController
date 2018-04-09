@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     fileio.cpp \
     fountainserial.cpp \
-    fountainclient.cpp
+    fountainclient.cpp \
+    tcppackager.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,5 @@ HEADERS += \
     fileio.h \
     fountainserial.h \
     fountainglobalconfig.h \
-    fountainclient.h
+    fountainclient.h \
+    tcppackager.h

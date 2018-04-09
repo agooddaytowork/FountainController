@@ -196,7 +196,7 @@ ApplicationWindow {
             Image
             {
                 anchors.verticalCenter: parent.verticalCenter
-                source: "images/fountainOffline.png"
+                source: theTcpClient.isFountainOnline? "images/fountainOnline.png" : "images/fountainOffline.png"
                 scale: 0.8
             }
 

@@ -12,6 +12,7 @@ class fountainClient: public QObject
     Q_OBJECT
 
     Q_PROPERTY(bool isSVOnline READ isSVOnline WRITE setIsSVOnline NOTIFY isSVOnlineChanged)
+    Q_PROPERTY(bool isFountainOnline READ isFountainOnline WRITE setIsFountainOnline NOTIFY isFountainOnlineChanged)
     QString m_ip;
     quint16 m_port;
     QDataStream in;
@@ -19,6 +20,7 @@ class fountainClient: public QObject
     QTcpSocket *tcpSocket = nullptr;
 
     bool m_Connected;
+    bool m_IsFountainOnline;
 public:
     fountainClient(QObject *parent = nullptr);
 
@@ -34,10 +36,15 @@ public:
     bool isSVOnline() const;
     void setIsSVOnline(bool input);
 
+    bool isFountainOnline() const;
+    void setIsFountainOnline(bool input);
+
 signals:
     void isSVOnlineChanged(bool);
+    void isFountainOnlineChanged(bool);
 private slots:
     void readyReadHandler();
+
 
 };
 

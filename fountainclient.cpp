@@ -2,9 +2,10 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QTextCodec>
+#include "tcppackager.h"
 
 
-fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new QTcpSocket(this)), m_Connected(false)
+fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new QTcpSocket(this)), m_Connected(false), m_IsFountainOnline(false)
 {
 
     in.setDevice(tcpSocket);
@@ -15,6 +16,17 @@ fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new 
     QObject::connect(tcpSocket,&QTcpSocket::connected,[=](){
         setIsSVOnline(true);
         qDebug() << "connected";
+
+        if(!m_IsFountainOnline)
+        {
+            QByteArray block;
+
+            QDataStream out(&block, QIODevice::WriteOnly);
+            out.setVersion(QDataStream::Qt_5_8);
+
+            out << tcpPackager::isFountainOnline();
+            tcpSocket->write(block);
+        }
 
     });
 
@@ -43,10 +55,29 @@ void fountainClient::readyReadHandler()
 {
 
     in.startTransaction();
-
     QByteArray result;
-
     in >> result;
+
+    if(tcpPackager::isPackageValid(result))
+    {
+        QJsonObject svReply = tcpPackager::packageToJson(result);
+
+        QString theCommand = svReply["Command"].toString();
+
+        if(theCommand == "fountainCurrentPlayingProgram")
+        {
+
+        }
+        else if (theCommand == "fountainStatus") {
+
+            setIsFountainOnline(svReply["Data"].toBool());
+        }
+        else if(theCommand == "fountainResponse")
+        {
+
+        }
+
+    }
 
     qDebug()<< "Reply from SV: " + result;
 
@@ -55,13 +86,11 @@ void fountainClient::readyReadHandler()
 void fountainClient::sendProgram( const QString &programName,const QByteArray &program)
 {
 
-    QJsonObject theOutObject;
-
-
-    theOutObject.insert("UUID" , "PC");
-    theOutObject.insert("ProgramName", programName);
-    //   theOutObject.insert("ProgramData", QTextCodec::codecForMib(106)->toUnicode(program));
-    theOutObject.insert("ProgramData", (QString) program.toHex());
+//    QJsonObject theOutObject;
+//    theOutObject.insert("UUID" , "PC");
+//    theOutObject.insert("ProgramName", programName);
+//    //   theOutObject.insert("ProgramData", QTextCodec::codecForMib(106)->toUnicode(program));
+//    theOutObject.insert("ProgramData", (QString) program.toHex());
 
 
 
@@ -70,7 +99,7 @@ void fountainClient::sendProgram( const QString &programName,const QByteArray &p
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_8);
 
-    out << QJsonDocument(theOutObject).toJson();
+    out << tcpPackager::playProgram(programName,program);
 
     tcpSocket->write(block);
 
@@ -100,9 +129,28 @@ void fountainClient::setIsSVOnline(bool input)
         m_Connected = input;
         emit isSVOnlineChanged(input);
     }
+
+    if(!m_Connected)
+    {
+        setIsFountainOnline(false);
+    }
 }
 
 void fountainClient::disconnect()
 {
      tcpSocket->close();
+}
+
+bool fountainClient::isFountainOnline() const
+{
+    return m_IsFountainOnline;
+}
+
+void fountainClient::setIsFountainOnline(bool input)
+{
+    if(m_IsFountainOnline != input)
+    {
+        m_IsFountainOnline = input;
+        emit isFountainOnlineChanged(input);
+    }
 }
