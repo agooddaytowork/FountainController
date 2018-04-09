@@ -19,7 +19,8 @@ int main(int argc, char *argv[])
     FileIO appIoManager("App");
     FileIO dataIoManager("Data");
 
-//    qDebug()<< QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    qDebug() << QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0);
+    qDebug()<< QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     fountainSerial fountainProgramSerializer;
     fountainClient aClient;

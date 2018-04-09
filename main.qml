@@ -23,7 +23,7 @@ ApplicationWindow {
                 id: toolButton
                 implicitHeight: 60
                 text: stackView.depth > 1 ? "\u25C0" : "\u2630"
-                font.pixelSize: Qt.application.font.pixelSize * 1.6
+                font.pixelSize: 20
 
                 onClicked: optionsMenu.open()
 
@@ -69,7 +69,7 @@ ApplicationWindow {
                 text: "Thêm chương trình"
                 id: addNewProgramButton
                 implicitHeight: 60
-                font.pixelSize: Qt.application.font.pixelSize * 1.6
+                font.pixelSize: 20
                 visible: {
                     if(stackView.currentItem.objectName == "SetupModePage" || stackView.currentItem.objectName == "AutoModePage") true
                     else false
@@ -112,7 +112,7 @@ ApplicationWindow {
 
                 id: testProgramButton
                 implicitHeight: 60
-                font.pixelSize: Qt.application.font.pixelSize * 1.6
+                font.pixelSize: 20
                 visible: {
                     if(stackView.currentItem.objectName == "SetupModePage") true
                     else false

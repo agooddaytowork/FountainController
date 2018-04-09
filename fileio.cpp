@@ -17,17 +17,21 @@ void FileIO::searchForFilesInFolder()
 
     fileNameList.clear();
 
-
-    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json").exists())
+    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).exists())
     {
-        QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json");
+         QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     }
 
-    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/" + m_subFolderName).exists()) QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/"+m_subFolderName);
+    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/Json").exists())
+    {
+        QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/Json");
+    }
+
+    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/Json/" + m_subFolderName).exists()) QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/Json/"+m_subFolderName);
 
     // scan for .txt files
 
-    QDirIterator it(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/" + m_subFolderName, QStringList() << "*.txt", QDir::Files, QDirIterator::NoIteratorFlags);
+    QDirIterator it(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/Json/" + m_subFolderName, QStringList() << "*.txt", QDir::Files, QDirIterator::NoIteratorFlags);
     while (it.hasNext())
     {
         it.next();
@@ -47,7 +51,7 @@ QString FileIO::read(const QString &fileName)
         return QString();
     }
 
-    QFile file(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/"+ m_subFolderName +"/" + fileName +".txt");
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/Json/"+ m_subFolderName +"/" + fileName +".txt");
     QString fileContent;
     if ( file.open(QIODevice::ReadOnly) ) {
         QString line;
@@ -71,7 +75,7 @@ bool FileIO::write(const QString &fileName, const QString &serialJson)
         if (m_subFolderName.isNull())
             return false;
 
-    QFile file(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/" + m_subFolderName +"/" + fileName +".txt");
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/Json/" + m_subFolderName +"/" + fileName +".txt");
     if (!file.open(QFile::WriteOnly | QFile::Truncate))
         return false;
 
