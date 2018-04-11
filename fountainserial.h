@@ -20,8 +20,13 @@ class fountainSerial : public QObject
     static constexpr quint8 m_escFlag  = 0x7F;
     static constexpr quint8 m_fountainNumber = 9;
     static constexpr quint8 m_dummyProgramNo = 0;
+    static constexpr quint8 m_playProgram = 0x01;
+    static constexpr quint8 m_playSpeed = 0x02;
+    static constexpr quint8 m_fountainSetting = 0x03;
+
     QByteArray m_ProgramData;
     quint16 m_GroupIDandEnable;
+    quint8 m_DataLength;
     QMap<quint8, QByteArray> m_serialPackage;
     bool m_GroupSyncing;
 

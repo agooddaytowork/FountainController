@@ -16,18 +16,19 @@ void FileIO::searchForFilesInFolder()
     // check if Folder Json exists
 
     fileNameList.clear();
+    m_thePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
 
-
-    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json").exists())
+    qDebug()<< m_thePath+"/Json";
+    if(!QDir(m_thePath+"/Json").exists())
     {
-        QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json");
+        QDir().mkdir(m_thePath+"/Json");
     }
 
-    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/" + m_subFolderName).exists()) QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/"+m_subFolderName);
+    if(!QDir(m_thePath+"/Json/" + m_subFolderName).exists()) QDir().mkdir(m_thePath+"/Json/"+m_subFolderName);
 
     // scan for .txt files
 
-    QDirIterator it(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/" + m_subFolderName, QStringList() << "*.txt", QDir::Files, QDirIterator::NoIteratorFlags);
+    QDirIterator it(m_thePath+"/Json/" + m_subFolderName, QStringList() << "*.txt", QDir::Files, QDirIterator::NoIteratorFlags);
     while (it.hasNext())
     {
         it.next();
@@ -47,7 +48,7 @@ QString FileIO::read(const QString &fileName)
         return QString();
     }
 
-    QFile file(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/"+ m_subFolderName +"/" + fileName +".txt");
+    QFile file(m_thePath+"/Json/"+ m_subFolderName +"/" + fileName +".txt");
     QString fileContent;
     if ( file.open(QIODevice::ReadOnly) ) {
         QString line;
@@ -71,7 +72,7 @@ bool FileIO::write(const QString &fileName, const QString &serialJson)
         if (m_subFolderName.isNull())
             return false;
 
-    QFile file(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)+"Json/" + m_subFolderName +"/" + fileName +".txt");
+    QFile file(m_thePath+ "/Json/" + m_subFolderName +"/" + fileName +".txt");
     if (!file.open(QFile::WriteOnly | QFile::Truncate))
         return false;
 

@@ -17,7 +17,7 @@ QByteArray &operator<<(QByteArray &l, quint32 r)
 }
 
 
-fountainSerial::fountainSerial(QObject *parent): QObject(parent), m_GroupIDandEnable(0), m_GroupSyncing(false)
+fountainSerial::fountainSerial(QObject *parent): QObject(parent), m_GroupIDandEnable(0), m_GroupSyncing(false), m_DataLength(0)
 {
     m_ProgramData.clear();
     m_serialPackage.clear();
@@ -38,6 +38,7 @@ QByteArray fountainSerial::serializedProgram(const QString &programName)
     QJsonArray programArray = aJsonDocument.array();
 
 
+    m_DataLength = 0;
     foreach (const QJsonValue &theProgram, programArray) {
 
         if(theProgram.toObject()["programName"].toString() == programName)
@@ -67,13 +68,18 @@ QByteArray fountainSerial::serializedProgram(const QString &programName)
                         m_ProgramData.append(m_dummyProgramNo);
                     }
                 }
-                m_serialPackage.insert(i, generateSerializedByteArray());
 
+                 QByteArray data = generateSerializedByteArray();
+                 m_DataLength += data.length();
+                m_serialPackage.insert(i, data);
             }
 
             QByteArray test;
 
             test << m_startFlag;
+            test << m_playProgram;
+            test << m_DataLength;
+
             foreach (QByteArray member, m_serialPackage) {
 
                 test.append(member);

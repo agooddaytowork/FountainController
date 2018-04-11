@@ -1,6 +1,7 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import Qt.labs.settings 1.0
 
 ApplicationWindow {
     id: window
@@ -11,6 +12,7 @@ ApplicationWindow {
 
     minimumWidth: 1200
     minimumHeight: 800
+
 
 
     header: ToolBar {
@@ -33,7 +35,7 @@ ApplicationWindow {
                     transformOrigin: Menu.TopRight
 
                     MenuItem {
-                        text: "Setup Mode"
+                        text: "Setup/Manual Mode"
                         font.pixelSize: 16
                         onTriggered: {
                             stackView.push(Qt.resolvedUrl("SetupModePage.qml")/*, {"fountainProgramModel": testModel}*/)
@@ -51,16 +53,16 @@ ApplicationWindow {
                         }
 
                     }
-                    MenuItem {
-                        text: "Manual Mode"
-                        font.pixelSize: 16
-                        onTriggered: {
+                    //                    MenuItem {
+                    //                        text: "Manual Mode"
+                    //                        font.pixelSize: 16
+                    //                        onTriggered: {
 
-                            stackView.push(Qt.resolvedUrl("ManualModePage.qml"))
-                            console.log("Manual Mode page")
-                        }
+                    //                            stackView.push(Qt.resolvedUrl("ManualModePage.qml"))
+                    //                            console.log("Manual Mode page")
+                    //                        }
 
-                    }
+                    //                    }
                 }
             }
 
@@ -88,7 +90,6 @@ ApplicationWindow {
                     else if(stackView.currentItem.objectName == "AutoModePage")
                     {
 
-
                         stackView.currentItem.openTimeSlotDialog = true
 
                     }
@@ -108,7 +109,7 @@ ApplicationWindow {
 
             ToolButton
             {
-                text: "Test program"
+                text: "Play program"
 
                 id: testProgramButton
                 implicitHeight: 60
@@ -137,8 +138,6 @@ ApplicationWindow {
                     stackView.currentItem.testProgram()
                 }
             }
-
-
 
         }
 
@@ -173,7 +172,6 @@ ApplicationWindow {
                 id: serverStatusMouseArea
                 anchors.fill: parent
 
-
                 onClicked:
                 {
                     svAddresDialog.open()
@@ -200,8 +198,27 @@ ApplicationWindow {
                 scale: 0.8
             }
 
+        }
+
+        CheckBox
+        {
+            id: manualCheckbox
+            width: 50
+            height: toolButton.implicitWidth
+            anchors.right: parent.right
+            z:3
+            anchors.rightMargin: 200 + toolButton.implicitWidth
+            anchors.verticalCenter: parent.verticalCenter
+            text: "Manual Checkbox"
+            visible: {
+                if(stackView.currentItem.objectName == "SetupModePage" ) true
+                else false
+            }
+
+
 
         }
+
         Rectangle
         {
             width: 50
@@ -258,7 +275,6 @@ ApplicationWindow {
     }
 
 
-
     StackView {
         id: stackView
 
@@ -280,154 +296,6 @@ ApplicationWindow {
         onTriggered:
         {
             clockLabel.text = new Date().toDateString() +" - " + new Date().toLocaleTimeString("H:mm")
-        }
-    }
-
-    ListModel {
-        id: testModel
-        ListElement{
-            programName: "chương trình 1"
-            groups:[
-                ListElement
-                {
-                    groupName: "tủ điện 1"
-                    fountainGroupEnable: false
-                    fountains:[
-                        ListElement
-                        {
-                            fountainName: 1
-                            fountainProgram: 5
-                            fountainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 2
-                            fountainProgram: 5
-                            fountainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 3
-                            fountainProgram: 5
-                            fountainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 4
-                            fountainProgram: 5
-                            fountainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 5
-                            fountainProgram: 5
-                            fountainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 6
-                            fountainProgram: 5
-                            fountainEnable: false
-                        }
-                        ,
-                        ListElement
-                        {
-                            fountainName: 7
-                            fountainProgram: 5
-                            fountainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 8
-                            fountainProgram: 5
-                            fountainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 9
-                            fountainProgram: 5
-                            fountainEnable: false
-                        }
-                    ]
-                },
-                ListElement
-                {
-                    groupName: "tủ điện 2"
-                    fountainGroupEnable: true
-                    fountains:[
-                        ListElement
-                        {
-                            fountainName: 1
-                            fountainProgram: 5
-                            fountainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 2
-                            fountainProgram: 2
-                            fountainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 3
-                            fountainProgram: 4
-                            fountainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 4
-                            fountainProgram: 5
-                            fountainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 5
-                            fountainProgram: 5
-                            fountainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 6
-                            fountainProgram: 5
-                            fountainEnable: false
-                        }
-                        ,
-                        ListElement
-                        {
-                            fountainName: 7
-                            fountainProgram: 5
-                            fountainEnable: true
-                        },
-                        ListElement
-                        {
-                            fountainName: 8
-                            fountainProgram: 5
-                            fountainEnable: false
-                        },
-                        ListElement
-                        {
-                            fountainName: 9
-                            fountainProgram: 5
-                            fountainEnable: false
-                        }
-                    ]
-                }]
-
-        }
-        ListElement{
-            programName: "chương trình 2"
-            groups:[
-                ListElement
-                {
-                    groupName: "tủ điện 3"
-                    fountainGroupEnable: true
-                },
-                ListElement
-                {
-                    groupName: "tủ điện 4"
-                    fountainGroupEnable: false
-                }]
-
         }
     }
 
@@ -528,6 +396,7 @@ ApplicationWindow {
                 focus: true
                 placeholderText:"Address..."
                 Layout.fillWidth: true
+                text: appSetting.hostAddress
             }
 
         }
@@ -536,9 +405,9 @@ ApplicationWindow {
         {
             if(!theTcpClient.isSVOnline)
             {
+                appSetting.hostAddress = svAddressDialogTextField.text
                 theTcpClient.connect(svAddressDialogTextField.text, 8080)
             }
-
 
         }
         onDiscarded:
@@ -547,4 +416,12 @@ ApplicationWindow {
             svAddresDialog.close()
         }
     }
+
+    Settings
+    {
+        id: appSetting
+        property string hostAddress: ""
+
+    }
+
 }

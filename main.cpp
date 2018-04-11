@@ -14,6 +14,9 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    app.setOrganizationName("Tam Duong");
+    app.setOrganizationDomain("tamduongs.com");
+    app.setApplicationName("Fountain Controller");
     QQmlApplicationEngine engine;
 
     FileIO appIoManager("App");

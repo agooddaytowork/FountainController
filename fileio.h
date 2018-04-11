@@ -18,6 +18,7 @@ class FileIO : public QObject
     Q_PROPERTY(QStringList nameList READ nameList WRITE setNameList NOTIFY nameListChanged)
 
     QStringList fileNameList;
+    QString m_thePath;
 
     bool fileNameExist(const QString &name);
 public:
