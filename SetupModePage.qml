@@ -124,7 +124,6 @@ Item {
                                                         "fountainProgram":1,
                                                         "fountainEnable": false}
 
-
                                                 ]
                                             },
                                             {"groupName": "FO2",
@@ -295,17 +294,55 @@ Item {
     {
         id: setupModePageGridView
 
-        rows: 1
-        columns: 3
+//        columnSpacing: 5
+        rowSpacing: 15
+        rows: {
+            if(parent.width >= 800)
+            {
+                1
+            }
+            else
+            {
+                3
+            }
+
+        }
+
+        columns:{
+            if(parent.width >= 800)
+            {
+                3
+            }
+            else
+            {
+                1
+            }
+        }
+
         anchors.fill: parent
 
         Rectangle
         {
             id: programListRec
-            width: parent.width/3
-            height: parent.height
-            border.width: 2
-            border.color: "black"
+            width: {if(parent.width >= 800)
+                {
+                   parent.width/3
+                }
+                else
+                {
+                    parent.width
+                }
+            }
+            height: {if(parent.width >= 800)
+                {
+                   parent.height
+                }
+                else
+                {
+                    parent.height/5
+                }
+            }
+            color: "#484848"
 
 
             ListView{
@@ -313,6 +350,7 @@ Item {
                 model: fountainProgramModel
                 anchors.fill: parent
                 clip: true
+                cacheBuffer: 500
 
                 delegate: SwipeDelegate{
 
@@ -332,7 +370,7 @@ Item {
                             }
                             else
                             {
-                                "white"
+                                "#212121"
                             }
                         }
 
@@ -376,24 +414,38 @@ Item {
                         fountaingroupIndex = 0
                         fountainIndex = 0
                         fountainList.model = fountainProgramModel.get(root.programIndex).groups.get(fountaingroupIndex).fountains
-
                     }
                 }
-
             }
 
         }
         Rectangle    {
             id: fountainGroupListRec
-            width: parent.width/3
-            height: parent.height
-            border.width: 1
-            border.color: "black"
+            width: {if(parent.width >= 800)
+                {
+                   parent.width/3
+                }
+                else
+                {
+                    parent.width
+                }
+            }
+            height: {if(parent.width >= 800)
+                {
+                   parent.height
+                }
+                else
+                {
+                    parent.height/5 *2
+                }
+            }
+
+            color: "#484848"
 
             ListView{
                 id: fountainGroupList
                 model: fountainProgramModel.get(0).groups
-
+                cacheBuffer: 500
                 anchors.fill: parent
                 clip: true
 
@@ -414,7 +466,7 @@ Item {
                             }
                             else
                             {
-                                "white"
+                                "#212121"
                             }
                         }
 
@@ -459,10 +511,26 @@ Item {
         }
         Rectangle    {
             id: fountainListRec
-            width: parent.width/3
-            height: parent.height
-            border.width: 1
-            border.color: "black"
+            width: {if(parent.width >= 800)
+                {
+                   parent.width/3
+                }
+                else
+                {
+                    parent.width
+                }
+            }
+            height: {if(parent.width >= 800)
+                {
+                   parent.height
+                }
+                else
+                {
+                    parent.height/5 *2
+                }
+            }
+
+            color: "#484848"
 
 
             ListView{
@@ -470,7 +538,7 @@ Item {
                 model: fountainProgramModel.get(0).groups.get(0).fountains
                 anchors.fill: parent
                 clip: true
-
+                cacheBuffer: 1500
 
                 delegate: SwipeDelegate{
 
@@ -483,7 +551,7 @@ Item {
                     text: "đài " + fountainName
                     background: Rectangle{
                         color:
-                            fountainSwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "white"
+                            fountainSwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "#212121"
                         border.color: "black"
                         border.width: 1
                     }
@@ -507,7 +575,7 @@ Item {
                     {
                         id: fountainComboBox
                         width: 150
-                        model: 20
+                        model: 32
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.rightMargin: fountainEnableSwitch.width + 20

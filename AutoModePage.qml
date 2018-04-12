@@ -121,7 +121,22 @@ Item {
         id: autoModeGridView
         anchors.fill: parent
         cellHeight: 300
-        cellWidth: parent.width/4
+        cellWidth:
+        {
+             if(parent.width >= 800)
+             {
+                 parent.width/4
+             }
+             else if(parent.width < 800 && parent.width >= 400)
+             {
+                 parent.width/2
+             }
+             else
+             {
+                 parent.width
+             }
+        }
+
 
         model: timeSLotModelUnsorted
 
@@ -138,7 +153,7 @@ Item {
 
                 height: parent.height * 0.5
                 anchors.right: parent.right
-                color: "black"
+                color: "#212121"
                 width: parent.width *0.4
                 anchors.bottom: parent.bottom
 
@@ -148,7 +163,7 @@ Item {
                     Label {
                         id: deleteLabel
                         text: qsTr("Delete")
-                        color: "white"
+                        color: "black"
                         verticalAlignment: Label.AlignVCenter
                         padding: 12
                         width: parent.width
@@ -172,7 +187,7 @@ Item {
                     Label {
                         id: editLabel
                         text: qsTr("Edit")
-                        color: "white"
+                        color: "black"
                         verticalAlignment: Label.AlignVCenter
                         padding: 12
                         width: parent.width
@@ -242,7 +257,7 @@ Item {
                                 }
                                 else
                                 {
-                                    "white"
+                                    "black"
 
                                 }
 
@@ -297,7 +312,7 @@ Item {
             {
                 color:
                 {
-                    "white"
+                    "#212121"
                 }
 
                 border.color: "black"
@@ -352,7 +367,7 @@ Item {
             id: timeSlotDialogRec
             width: 400
             height: 500
-            color: "white"
+            color: "black"
             radius: 5
 
             Column
@@ -397,7 +412,7 @@ Item {
                                 }
                                 else
                                 {
-                                    "white"
+                                    "black"
                                 }
 
                             }
@@ -546,7 +561,7 @@ Item {
                                 }
                                 else
                                 {
-                                    "white"
+                                    "black"
 
                                 }
 

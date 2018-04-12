@@ -10,16 +10,17 @@ ApplicationWindow {
     height: 600
     title: qsTr("FountainController")
 
-    minimumWidth: 1200
-    minimumHeight: 800
-
-
 
     header: ToolBar {
         contentHeight: toolButton.implicitHeight
 
         Row{
-            anchors.fill: parent
+            //            anchors.fill: parent
+            anchors.top: parent.top
+            anchors.left: parent.left
+            width: 500
+            //            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             spacing: 5
             ToolButton {
                 id: toolButton
@@ -53,219 +54,240 @@ ApplicationWindow {
                         }
 
                     }
-                    //                    MenuItem {
-                    //                        text: "Manual Mode"
-                    //                        font.pixelSize: 16
-                    //                        onTriggered: {
-
-                    //                            stackView.push(Qt.resolvedUrl("ManualModePage.qml"))
-                    //                            console.log("Manual Mode page")
-                    //                        }
-
-                    //                    }
                 }
             }
 
-            ToolButton
+
+            Rectangle
             {
-                text: "Thêm chương trình"
-                id: addNewProgramButton
-                implicitHeight: 60
-                font.pixelSize: Qt.application.font.pixelSize * 1.6
-                visible: {
-                    if(stackView.currentItem.objectName == "SetupModePage" || stackView.currentItem.objectName == "AutoModePage") true
-                    else false
+                width: 50
+                height: toolButton.implicitHeight
+                //  anchors.right: parent.right
+                //  anchors.rightMargin: 20
+                color: addNewMouseArea.pressed? "tomato" : "transparent"
 
-                }
-
-
-
-                onClicked:
+                id: addNewButton
+                Image
                 {
-                    if(stackView.currentItem.objectName == "SetupModePage")
-                    {
-                        inputDialog.open()
-
-                    }
-                    else if(stackView.currentItem.objectName == "AutoModePage")
-                    {
-
-                        stackView.currentItem.openTimeSlotDialog = true
-
-                    }
-                }
-                background: Rectangle
-                {
-
-
-                    height: toolButton.implicitHeight * 0.7
-                    radius: 5
-                    color: addNewProgramButton.pressed ? "tomato" : "white"
+                    id: addNewIcon
                     anchors.verticalCenter: parent.verticalCenter
+                    source: "images/addNew.png"
+                    scale: 0.8
+
                 }
 
+                MouseArea
+                {
+                    id: addNewMouseArea
+                    anchors.fill: parent
+
+                    onClicked:
+                    {
+                        if(stackView.currentItem.objectName == "SetupModePage")
+                        {
+                            inputDialog.open()
+
+                        }
+                        else if(stackView.currentItem.objectName == "AutoModePage")
+                        {
+
+                            stackView.currentItem.openTimeSlotDialog = true
+
+                        }
+                    }
+
+
+                }
 
             }
 
-            ToolButton
+            Rectangle
             {
-                text: "Play program"
+                width: 50
+                height: toolButton.implicitHeight
+                //                anchors.left: parent.left
+                //                anchors.leftMargin: 225
+                color: playButtonMouseArea.pressed? "tomato" : "transparent"
 
-                id: testProgramButton
-                implicitHeight: 60
-                font.pixelSize: Qt.application.font.pixelSize * 1.6
-                visible: {
+                id: playButton
+
+                visible:
+                {
+                    if(stackView.currentItem.objectName == "AutoModePage") true
+                    else false
+                }
+
+                Image
+                {
+                    id: playButtonImage
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "images/play.png"
+                    scale: 0.85
+                }
+
+                MouseArea
+                {
+                    id: playButtonMouseArea
+                    anchors.fill: parent
+
+                    onClicked:
+                    {
+                        if(stackView.currentItem.autoPlayFountain == false)
+                        {
+                            playButtonImage.source = "images/stop.png"
+                            stackView.currentItem.autoPlayFountain = true
+
+                        }
+                        else
+                        {
+
+                            playButtonImage.source = "images/play.png"
+                            stackView.currentItem.autoPlayFountain = false
+                        }
+
+
+                        stackView.currentItem.generateAutoPlayTimerInterval()
+                    }
+
+                }
+
+            }
+
+            Rectangle
+            {
+                width: 50
+                height: toolButton.implicitHeight
+                //                anchors.left: parent.left
+                //                anchors.leftMargin: 225
+                color: playProgramButtonMouseArea.pressed? "tomato" : "transparent"
+
+                id: playProgramButton
+
+                visible:
+                {
                     if(stackView.currentItem.objectName == "SetupModePage") true
                     else false
-
                 }
 
-                //                       visible: true
-
-
-
-                background: Rectangle
+                Image
                 {
-
-                    height: toolButton.implicitHeight * 0.7
-                    radius: 5
-                    color: testProgramButton.pressed ? "tomato" : "white"
+                    id: playProgramButtonImage
                     anchors.verticalCenter: parent.verticalCenter
+                    source: "images/play.png"
+                    scale: 0.85
                 }
 
-                onClicked:
+                MouseArea
                 {
-                    stackView.currentItem.testProgram()
-                }
-            }
+                    id: playProgramButtonMouseArea
+                    anchors.fill: parent
 
-        }
-
-
-        Label
-        {
-            id: clockLabel
-            text: new Date().toDateString() +" - " + new Date().toLocaleTimeString("H:mm")
-            anchors.centerIn: parent
-            font.pixelSize: 20
-        }
-
-        Rectangle
-        {
-            width: 50
-            height: toolButton.implicitHeight
-            anchors.right: parent.right
-            anchors.rightMargin: 20
-            color: serverStatusMouseArea.pressed? "tomato" : "transparent"
-
-            id: serverStatusIcon
-            Image
-            {
-                id: svStatusImage
-                anchors.verticalCenter: parent.verticalCenter
-                source: theTcpClient.isSVOnline ? "images/serverOnline.png" : "images/serverOffline.png"
-
-            }
-
-            MouseArea
-            {
-                id: serverStatusMouseArea
-                anchors.fill: parent
-
-                onClicked:
-                {
-                    svAddresDialog.open()
-                }
-
-
-            }
-
-        }
-
-        Rectangle
-        {
-            width: 50
-            height: toolButton.implicitHeight
-            anchors.right: parent.right
-            anchors.rightMargin: 40 + toolButton.implicitWidth
-            color: "transparent"
-
-            id: fountainStatusIcon
-            Image
-            {
-                anchors.verticalCenter: parent.verticalCenter
-                source: theTcpClient.isFountainOnline? "images/fountainOnline.png" : "images/fountainOffline.png"
-                scale: 0.8
-            }
-
-        }
-
-        CheckBox
-        {
-            id: manualCheckbox
-            width: 50
-            height: toolButton.implicitWidth
-            anchors.right: parent.right
-            z:3
-            anchors.rightMargin: 200 + toolButton.implicitWidth
-            anchors.verticalCenter: parent.verticalCenter
-            text: "Manual Checkbox"
-            visible: {
-                if(stackView.currentItem.objectName == "SetupModePage" ) true
-                else false
-            }
-
-
-
-        }
-
-        Rectangle
-        {
-            width: 50
-            height: toolButton.implicitHeight
-            anchors.left: parent.left
-            anchors.leftMargin: 225
-            color: playButtonMouseArea.pressed? "tomato" : "transparent"
-
-            id: playButton
-
-            visible:
-            {
-                if(stackView.currentItem.objectName == "AutoModePage") true
-                else false
-            }
-
-            Image
-            {
-                id: playButtonImage
-                anchors.verticalCenter: parent.verticalCenter
-                source: "images/play.png"
-                scale: 0.8
-            }
-
-            MouseArea
-            {
-                id: playButtonMouseArea
-                anchors.fill: parent
-
-                onClicked:
-                {
-                    if(stackView.currentItem.autoPlayFountain == false)
+                    onClicked:
                     {
-                        playButtonImage.source = "images/stop.png"
-                        stackView.currentItem.autoPlayFountain = true
-
+                        stackView.currentItem.testProgram()
                     }
-                    else
-                    {
 
-                        playButtonImage.source = "images/play.png"
-                        stackView.currentItem.autoPlayFountain = false
+                }
+
+            }
+
+
+//            ToolButton
+//            {
+//                text: "Play program"
+
+//                id: testProgramButton
+//                implicitHeight: 60
+//                font.pixelSize: Qt.application.font.pixelSize * 1.6
+//                visible: {
+//                    if(stackView.currentItem.objectName == "SetupModePage") true
+//                    else false
+//                }
+
+//                //                       visible: true
+
+//                background: Rectangle
+//                {
+
+//                    height: toolButton.implicitHeight * 0.7
+//                    radius: 5
+//                    color: testProgramButton.pressed ? "tomato" : "white"
+//                    anchors.verticalCenter: parent.verticalCenter
+//                }
+
+//                onClicked:
+//                {
+//                    stackView.currentItem.testProgram()
+//                }
+//            }
+
+
+            Rectangle
+            {
+                width: 50
+                height: toolButton.implicitHeight
+                //  anchors.right: parent.right
+                //  anchors.rightMargin: 20
+                color: serverStatusMouseArea.pressed? "tomato" : "transparent"
+
+                id: serverStatusIcon
+                Image
+                {
+                    id: svStatusImage
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: theTcpClient.isSVOnline ? "images/serverOnline.png" : "images/serverOffline.png"
+
+                }
+
+                MouseArea
+                {
+                    id: serverStatusMouseArea
+                    anchors.fill: parent
+
+                    onClicked:
+                    {
+                        svAddresDialog.open()
                     }
 
 
-                    stackView.currentItem.generateAutoPlayTimerInterval()
                 }
+
+            }
+
+            Rectangle
+            {
+                width: 50
+                height: toolButton.implicitHeight
+                //                anchors.right: parent.right
+                //                anchors.rightMargin: 40 + toolButton.implicitWidth
+                color: "transparent"
+
+                id: fountainStatusIcon
+                Image
+                {
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: theTcpClient.isFountainOnline? "images/fountainOnline.png" : "images/fountainOffline.png"
+                    scale: 0.8
+                }
+
+            }
+
+            CheckBox
+            {
+                id: manualCheckbox
+                width: 50
+                height: toolButton.implicitWidth
+                //                anchors.right: parent.right
+                //                z:3
+                //                anchors.rightMargin: 200 + toolButton.implicitWidth
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Manual Checkbox"
+                visible: {
+                    if(stackView.currentItem.objectName == "SetupModePage" ) true
+                    else false
+                }
+
+
 
             }
 
@@ -286,18 +308,7 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
-    Timer
-    {
-        id: clockTimer
-        interval: 15000
-        repeat: true
-        running: true
-        triggeredOnStart:  true
-        onTriggered:
-        {
-            clockLabel.text = new Date().toDateString() +" - " + new Date().toLocaleTimeString("H:mm")
-        }
-    }
+
 
     Dialog {
         id: inputDialog
