@@ -391,15 +391,21 @@ Item {
                         height: parent.height
                         anchors.right: parent.right
 
-                        SwipeDelegate.onClicked:
-                        {
 
-                            fountainProgramModel.remove(index)
-                            updateProgramToTextFile()
+                        MouseArea
+                        {
+                            id: deleteMouseArea
+                            anchors.fill: parent
+
+                            onPressed:
+                            {
+                                fountainProgramModel.remove(index)
+                                updateProgramToTextFile()
+                            }
                         }
 
                         background: Rectangle {
-                            color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                            color: deleteMouseArea.pressed ? Qt.darker("tomato", 1.1) : "tomato"
                         }
 
                     }

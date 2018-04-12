@@ -169,17 +169,21 @@ Item {
                         width: parent.width
                         height: parent.height/2
 
-
-                        SwipeDelegate.onClicked:
-                        {
-
-                            timeSLotModelUnsorted.remove(index)
-                            root.sortTimeSlotModel()
-                            root.updateAppDataToFile()
+                        background: Rectangle {
+                            color: deleteMouseArea.pressed ? Qt.darker("tomato", 1.1) : "tomato"
                         }
 
-                        background: Rectangle {
-                            color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                        MouseArea
+                        {
+                            id: deleteMouseArea
+                            anchors.fill: parent
+
+                            onPressed:
+                            {
+                                timeSLotModelUnsorted.remove(index)
+                                root.sortTimeSlotModel()
+                                root.updateAppDataToFile()
+                            }
                         }
 
                     }
@@ -194,18 +198,22 @@ Item {
                         height: parent.height/2
 
 
-                        SwipeDelegate.onClicked:
+                        MouseArea
                         {
+                            id: editMouseArea
+                            anchors.fill: parent
 
-                            currentUnsortedIndex = index
-                            autoModeGridView.currentIndex = currentUnsortedIndex
-                            timeSlotDialog.repeatsIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).repeat
-                            timeSlotDialog.isEditMode = true
-                            timeSlotDialog.open()
+                            onPressed:
+                            {
+                                currentUnsortedIndex = index
+                                autoModeGridView.currentIndex = currentUnsortedIndex
+                                timeSlotDialog.repeatsIndex = timeSLotModelUnsorted.get(currentUnsortedIndex).repeat
+                                timeSlotDialog.isEditMode = true
+                                timeSlotDialog.open()
+                            }
                         }
-
                         background: Rectangle {
-                            color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                            color: editMouseArea.pressed ? Qt.darker("tomato", 1.1) : "tomato"
                         }
 
                     }

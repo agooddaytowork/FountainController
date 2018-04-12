@@ -16,7 +16,17 @@ void FileIO::searchForFilesInFolder()
     // check if Folder Json exists
 
     fileNameList.clear();
-    m_thePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
+
+#ifdef Q_OS_ANDROID
+m_thePath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0);
+#endif
+
+#ifdef Q_OS_WIN || Q_OS_IOS
+      m_thePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
+#endif
+
+
+
 
     qDebug()<< m_thePath+"/Json";
     if(!QDir(m_thePath+"/Json").exists())
