@@ -335,8 +335,6 @@ Item {
         property bool isEditMode: false
 
 
-
-
         onAboutToShow:
         {
             toOrFromSelector.fromIsSelected = true
@@ -367,7 +365,7 @@ Item {
             id: timeSlotDialogRec
             width: 400
             height: 500
-            color: "black"
+            color: "#212121"
             radius: 5
 
             Column

@@ -342,6 +342,8 @@ Item {
                     parent.height/5
                 }
             }
+            border.width: 2
+            border.color: "black"
             color: "#484848"
 
 
@@ -440,6 +442,8 @@ Item {
                 }
             }
 
+            border.width: 2
+            border.color: "black"
             color: "#484848"
 
             ListView{
@@ -529,7 +533,8 @@ Item {
                     parent.height/5 *2
                 }
             }
-
+            border.width: 2
+            border.color: "black"
             color: "#484848"
 
 

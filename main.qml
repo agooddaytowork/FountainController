@@ -16,12 +16,13 @@ ApplicationWindow {
 
         Row{
             //            anchors.fill: parent
-            anchors.top: parent.top
-            anchors.left: parent.left
-            width: 500
+//            anchors.top: parent.top
+//            anchors.left: parent.left
+//            width: 500
+            anchors.fill: parent
             //            anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 5
+            spacing: 10
             ToolButton {
                 id: toolButton
                 implicitHeight: 60
