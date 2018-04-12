@@ -353,7 +353,7 @@ Item {
                 model: fountainProgramModel
                 anchors.fill: parent
                 clip: true
-                cacheBuffer: 500
+                cacheBuffer: 0
 
                 delegate: SwipeDelegate{
 
@@ -456,7 +456,7 @@ Item {
             ListView{
                 id: fountainGroupList
                 model: fountainProgramModel.get(0).groups
-                cacheBuffer: 500
+                cacheBuffer: 1500
                 anchors.fill: parent
                 clip: true
 

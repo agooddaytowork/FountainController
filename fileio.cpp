@@ -25,7 +25,7 @@ m_thePath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).v
       m_thePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
 #endif
 
-#ifdef Q_OS_IOS
+#if defined(Q_OS_MACOS) || defined(Q_OS_DARWIN64)
       m_thePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 #endif
 
