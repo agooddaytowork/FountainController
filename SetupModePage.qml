@@ -298,7 +298,7 @@ Item {
 //        columnSpacing: 5
         rowSpacing: 15
         rows: {
-            if(parent.width >= 800)
+            if(parent.width >= 1200)
             {
                 1
             }
@@ -310,7 +310,7 @@ Item {
         }
 
         columns:{
-            if(parent.width >= 800)
+            if(parent.width >= 1200)
             {
                 3
             }
@@ -325,7 +325,7 @@ Item {
         Rectangle
         {
             id: programListRec
-            width: {if(parent.width >= 800)
+            width: {if(parent.width >= 1200)
                 {
                    parent.width/3
                 }
@@ -334,7 +334,7 @@ Item {
                     parent.width
                 }
             }
-            height: {if(parent.width >= 800)
+            height: {if(parent.width >= 1200)
                 {
                    parent.height
                 }
@@ -430,7 +430,7 @@ Item {
         }
         Rectangle    {
             id: fountainGroupListRec
-            width: {if(parent.width >= 800)
+            width: {if(parent.width >= 1200)
                 {
                    parent.width/3
                 }
@@ -439,7 +439,7 @@ Item {
                     parent.width
                 }
             }
-            height: {if(parent.width >= 800)
+            height: {if(parent.width >= 1200)
                 {
                    parent.height
                 }
@@ -493,9 +493,6 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         checked: fountainGroupEnable
 
-
-
-
                         onClicked: {
                             console.log("clicked")
                             fountainProgramModel.get(programIndex).groups.setProperty(fountainGroupListSwipeDelegateIndex,"fountainGroupEnable", checked)
@@ -522,7 +519,7 @@ Item {
         }
         Rectangle    {
             id: fountainListRec
-            width: {if(parent.width >= 800)
+            width: {if(parent.width >= 1200)
                 {
                    parent.width/3
                 }
@@ -531,7 +528,7 @@ Item {
                     parent.width
                 }
             }
-            height: {if(parent.width >= 800)
+            height: {if(parent.width >= 1200)
                 {
                    parent.height
                 }

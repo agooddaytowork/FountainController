@@ -122,19 +122,20 @@ Item {
         cellHeight: 300
         cellWidth:
         {
-             if(parent.width >= 800)
-             {
-                 parent.width/4
-             }
-             else if(parent.width < 800 && parent.width >= 400)
-             {
-                 parent.width/2
-             }
-             else
-             {
-                 parent.width
-             }
+            if(parent.width >= 1200)
+            {
+                parent.width/4
+            }
+            else if(parent.width < 1200 && parent.width >= 600)
+            {
+                parent.width/2
+            }
+            else
+            {
+                parent.width
+            }
         }
+
 
 
         model: timeSLotModelUnsorted
@@ -145,6 +146,7 @@ Item {
             height: autoModeGridView.cellHeight
             //            border.width: 1
             //            border.color: "black"
+
 
 
 
@@ -820,7 +822,7 @@ Item {
         property int currentIndexofPlayingTimeSlot: 0
         onTriggered:
         {
-           // VERY IMPORTANT SLOTTTTT
+            // VERY IMPORTANT SLOTTTTT
 
             if(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).timeSlotEnable)
             {
@@ -923,7 +925,7 @@ Item {
                         theIndexArray.push(i)
                     }
                 }
-                    var nothingTobePlayedToday = 1
+                var nothingTobePlayedToday = 1
                 if(theIndexArray.length != 0)
                 {
                     // compare the fromHour of all the items in theIndexArray, get the closet fromHour to the current time
@@ -973,7 +975,7 @@ Item {
                     console.log("interValToNext Day: " + intervalToNextDay)
                     autoPlayTimer.interval = intervalToNextDay
                     autoPlayTimer.start()
-//                    autoPlayTimer.start()
+                    //                    autoPlayTimer.start()
                     return
                 }
                 var theInterVal = (theTimeTobePlayed - toMsecsSinceEpoch(new Date()))
