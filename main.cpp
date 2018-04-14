@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) || defined(Q_OS_ANDROID)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 

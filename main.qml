@@ -289,6 +289,10 @@ ApplicationWindow {
                     else false
                 }
 
+                onCheckedChanged: {
+                    stackView.currentItem.manualMode = manualCheckbox.checked
+                }
+
 
 
             }

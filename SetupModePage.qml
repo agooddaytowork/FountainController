@@ -11,6 +11,7 @@ Item {
     property int fountainIndex: 0
 
     property ListModel fountainProgramModel: ListModel {}
+    property bool manualMode: false
 
     function testProgram()
     {
@@ -423,6 +424,11 @@ Item {
                         fountaingroupIndex = 0
                         fountainIndex = 0
                         fountainList.model = fountainProgramModel.get(root.programIndex).groups.get(fountaingroupIndex).fountains
+
+                        if(manualMode)
+                        {
+                            testProgram()
+                        }
                     }
                 }
             }
@@ -498,6 +504,10 @@ Item {
                             fountainProgramModel.get(programIndex).groups.setProperty(fountainGroupListSwipeDelegateIndex,"fountainGroupEnable", checked)
 
                             updateProgramToTextFile()
+                            if(manualMode)
+                            {
+                                testProgram()
+                            }
                         }
 
 
@@ -577,6 +587,11 @@ Item {
                         {
                             fountainProgramModel.get(programIndex).groups.get(fountaingroupIndex).fountains.setProperty(fountainSwipeDelegateIndex,"fountainEnable", checked)
                             updateProgramToTextFile()
+
+                            if(manualMode)
+                            {
+                                testProgram()
+                            }
                         }
                     }
 
@@ -596,6 +611,11 @@ Item {
                             fountainProgramModel.get(programIndex).groups.get(fountaingroupIndex).fountains.setProperty(fountainSwipeDelegateIndex,"fountainProgram", currentIndex)
 
                             updateProgramToTextFile()
+
+                            if(manualMode)
+                            {
+                                testProgram()
+                            }
                         }
 
                     }
