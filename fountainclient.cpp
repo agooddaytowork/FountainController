@@ -8,6 +8,8 @@
 fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new QTcpSocket(this)), m_Connected(false), m_IsFountainOnline(false)
 {
 
+
+
     in.setDevice(tcpSocket);
     in.setVersion(QDataStream::Qt_5_8);
 
@@ -73,6 +75,10 @@ void fountainClient::readyReadHandler()
             setIsFountainOnline(svReply["Data"].toBool());
         }
         else if(theCommand == "fountainResponse")
+        {
+
+        }
+        else if(theCommand == "remoteSession")
         {
 
         }

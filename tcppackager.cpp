@@ -5,6 +5,26 @@ tcpPackager::tcpPackager()
 
 }
 
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN) || defined(Q_OS_UNIX)
+
+int tcpPackager::m_clientType = 0;
+#else
+
+int tcpPackager::m_clientType = 1;
+
+#endif
+QString tcpPackager::m_clientId = tcpPackager::generateClientId();
+
+
+
+
+QString tcpPackager::generateClientId()
+{
+
+ return (QString) QCryptographicHash::hash("clientId"+ QByteArray::number(QDateTime::currentMSecsSinceEpoch()), QCryptographicHash::Sha256);
+
+}
+
 
 QByteArray tcpPackager::playProgram(const QString &programName, const QByteArray &Program)
 {
@@ -13,6 +33,8 @@ QByteArray tcpPackager::playProgram(const QString &programName, const QByteArray
     qint64 theTimeStamp = QDateTime::currentMSecsSinceEpoch();
     QByteArray time;
     time.append(QString::number(theTimeStamp));
+    thePackage.insert("ClientId", m_clientId);
+    thePackage.insert("ClientType", m_clientType);
     thePackage.insert("UUID", (QString) QCryptographicHash::hash(theSecretKey + time, QCryptographicHash::Sha256));
     thePackage.insert("TimeStamp",QString::number(theTimeStamp) );
     thePackage.insert("Command", "playProgram");
@@ -56,6 +78,8 @@ QByteArray tcpPackager::isFountainOnline()
     qint64 theTimeStamp = QDateTime::currentMSecsSinceEpoch();
     QByteArray time;
     time.append(QString::number(theTimeStamp));
+    thePackage.insert("ClientId", m_clientId);
+    thePackage.insert("ClientType", m_clientType);
     thePackage.insert("UUID", (QString) QCryptographicHash::hash(theSecretKey + time, QCryptographicHash::Sha256));
     thePackage.insert("TimeStamp",QString::number(theTimeStamp) );
     thePackage.insert("Command", "isFountainOnline");
@@ -63,6 +87,7 @@ QByteArray tcpPackager::isFountainOnline()
     QJsonDocument aDocument(thePackage);
             return aDocument.toJson();
 }
+
 
 QByteArray tcpPackager::fountainResponse(const QByteArray &response)
 {

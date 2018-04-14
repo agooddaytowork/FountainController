@@ -9,8 +9,14 @@
 #define theSecretKey "fountainController"
 class tcpPackager
 {
+
+    static QString m_clientId;
+    static int m_clientType;
+
+
 public:
     tcpPackager();
+    static QString generateClientId();
     static QByteArray playProgram(const QString &programName, const QByteArray &Program);
     static QByteArray isFountainOnline();
     static QByteArray fountainResponse(const QByteArray &response);

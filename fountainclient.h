@@ -6,6 +6,7 @@
 #include <QIODevice>
 #include <QtNetwork>
 
+
 class fountainClient: public QObject
 {
 
@@ -17,10 +18,13 @@ class fountainClient: public QObject
     quint16 m_port;
     QDataStream in;
 
+
     QTcpSocket *tcpSocket = nullptr;
 
     bool m_Connected;
     bool m_IsFountainOnline;
+
+
 public:
     fountainClient(QObject *parent = nullptr);
 
