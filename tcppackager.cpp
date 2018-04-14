@@ -9,10 +9,10 @@ QString tcpPackager::m_clientId = tcpPackager::generateClientId();
 QString tcpPackager::generateClientId()
 {
 
-    return (QString) QCryptographicHash::hash("clientId" + QByteArray::number(QDateTime::currentMSecsSinceEpoch()),QCryptographicHash::Sha256);
+    static QString id =  QCryptographicHash::hash("clientId" + QByteArray::number(QDateTime::currentMSecsSinceEpoch()),QCryptographicHash::Sha256);
 
 
-
+    return id;
 
 }
 
@@ -169,6 +169,7 @@ QByteArray tcpPackager::requestToAddNewClient()
     thePackage.insert("UUID", (QString) QCryptographicHash::hash(theSecretKey + time, QCryptographicHash::Sha256));
     thePackage.insert("TimeStamp",QString::number(theTimeStamp) );
     thePackage.insert("Command", "addNewClient");
+
     QJsonDocument aDocument(thePackage);
     return aDocument.toJson();
 
