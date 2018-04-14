@@ -25,9 +25,18 @@ fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new 
 
             QDataStream out(&block, QIODevice::WriteOnly);
             out.setVersion(QDataStream::Qt_5_8);
+            // check for fountain Online Status
 
-            out << tcpPackager::isFountainOnline();
-            tcpSocket->write(block);
+            out << tcpPackager::requestToAddNewClient();
+
+
+            qDebug() << tcpSocket->write(block);
+
+
+            out <<tcpPackager::AskWhoIsControlling();
+            qDebug() << tcpSocket->write(block);
+
+
         }
 
     });
@@ -36,9 +45,9 @@ fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new 
         setIsSVOnline(false);
     });
 
-//    QObject::connect(tcpSocket,&QTcpSocket::error, [=](){
-//       setIsSVOnline(false);
-//    });
+    //    QObject::connect(tcpSocket,&QTcpSocket::error, [=](){
+    //       setIsSVOnline(false);
+    //    });
 
 }
 
@@ -78,8 +87,26 @@ void fountainClient::readyReadHandler()
         {
 
         }
-        else if(theCommand == "remoteSession")
+        else if(theCommand == "whoIsControlling")
         {
+            if(svReply["ClientId"].toString() != tcpPackager::m_clientId)
+            {
+                // this device is not in control
+                // popUp dialog to user
+
+                emit requestPermission();
+#if fountainClientDebug
+                qDebug() << "whoIsControlling - don't have permission ha -> request di";
+#endif
+            }
+            else
+            {
+                // yeah, can control shit!
+                // do nothing at the moment ha!
+#if fountainClientDebug
+                qDebug() << "whoIsControlling - yeah, you have permission baby";
+#endif
+            }
 
         }
 
@@ -92,14 +119,7 @@ void fountainClient::readyReadHandler()
 void fountainClient::sendProgram( const QString &programName,const QByteArray &program)
 {
 
-//    QJsonObject theOutObject;
-//    theOutObject.insert("UUID" , "PC");
-//    theOutObject.insert("ProgramName", programName);
-//    //   theOutObject.insert("ProgramData", QTextCodec::codecForMib(106)->toUnicode(program));
-//    theOutObject.insert("ProgramData", (QString) program.toHex());
-
-
-
+    emit requestPermission();
     QByteArray block;
 
     QDataStream out(&block, QIODevice::WriteOnly);
@@ -144,7 +164,7 @@ void fountainClient::setIsSVOnline(bool input)
 
 void fountainClient::disconnect()
 {
-     tcpSocket->close();
+    tcpSocket->close();
 }
 
 bool fountainClient::isFountainOnline() const

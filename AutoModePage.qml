@@ -334,8 +334,19 @@ Item {
     Dialog
     {
         id: timeSlotDialog
-        x: (parent.width- timeSlotDialogRec.width)/2
-        y: (parent.height - timeSlotDialogRec.height)/2
+        x:
+        {
+            if(root.width >= 1200)
+            {
+                (root.width- timeSlotDialogRec.width)/2
+            }
+            else
+            {
+                -25
+            }
+        }
+
+        y: (root.height - timeSlotDialogRec.height)/2
         parent: ApplicationWindow.overlay
         closePolicy: Popup.NoAutoClose || Popup.CloseOnEscape
         modal: true
@@ -372,7 +383,19 @@ Item {
         Rectangle
         {
             id: timeSlotDialogRec
-            width: 400
+            width: {
+                if(root.width >= 1200)
+                {
+                    450
+                }
+                else
+                {
+                 root.width
+                }
+
+
+            }
+
             height: 500
             color: "#212121"
             radius: 5

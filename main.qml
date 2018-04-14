@@ -12,6 +12,17 @@ ApplicationWindow {
     title: qsTr("FountainController")
 
 
+    Connections
+    {
+        target: theTcpClient
+        onRequestPermission:
+        {
+            console.log("as;dkasl;dkl;asl;d")
+        }
+    }
+
+
+
     header: ToolBar {
         contentHeight: toolButton.implicitHeight
 
@@ -27,7 +38,7 @@ ApplicationWindow {
             ToolButton {
                 id: toolButton
                 implicitHeight: 60
-                text: stackView.depth > 1 ? "\u25C0" : "\u2630"
+                text:   "\u2630"
                 font.pixelSize: Qt.application.font.pixelSize * 1.6
 
                 onClicked: optionsMenu.open()

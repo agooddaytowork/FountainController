@@ -5,7 +5,7 @@
 #include <QDataStream>
 #include <QIODevice>
 #include <QtNetwork>
-
+#define fountainClientDebug (1)
 
 class fountainClient: public QObject
 {
@@ -14,6 +14,7 @@ class fountainClient: public QObject
 
     Q_PROPERTY(bool isSVOnline READ isSVOnline WRITE setIsSVOnline NOTIFY isSVOnlineChanged)
     Q_PROPERTY(bool isFountainOnline READ isFountainOnline WRITE setIsFountainOnline NOTIFY isFountainOnlineChanged)
+
     QString m_ip;
     quint16 m_port;
     QDataStream in;
@@ -23,6 +24,7 @@ class fountainClient: public QObject
 
     bool m_Connected;
     bool m_IsFountainOnline;
+
 
 
 public:
@@ -46,6 +48,7 @@ public:
 signals:
     void isSVOnlineChanged(bool);
     void isFountainOnlineChanged(bool);
+    void requestPermission();
 private slots:
     void readyReadHandler();
 

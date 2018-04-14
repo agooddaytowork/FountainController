@@ -10,11 +10,14 @@
 class tcpPackager
 {
 
-    static QString m_clientId;
-    static int m_clientType;
-
 
 public:
+    static QString m_clientId;
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN) || defined(Q_OS_UNIX)
+    static constexpr int m_clientType = 0;
+#else
+    constexpr int m_clientType = 1;
+#endif
     tcpPackager();
     static QString generateClientId();
     static QByteArray playProgram(const QString &programName, const QByteArray &Program);
@@ -25,6 +28,10 @@ public:
 
     static bool isPackageValid(const QByteArray &input);
     static QJsonObject packageToJson(const QByteArray &input);
+    static QByteArray AnswerWhoIsControlling(const QString &clientId, const int &clientType);
+    static QByteArray AskWhoIsControlling();
+    static QByteArray requestToAddNewClient();
+
 
 
 };

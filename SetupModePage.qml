@@ -57,7 +57,6 @@ Item {
 
             }
 
-
             groupObject = {}
             dataModel["groups"] = groupModel
             Data.push(dataModel)
@@ -66,9 +65,6 @@ Item {
         return JSON.stringify(Data)
 
     }
-
-
-
 
 
 
@@ -87,7 +83,6 @@ Item {
 
 
             fountainProgramModel.append(JSON.parse(dataIoManager.read("Data")))
-
 
         }
 

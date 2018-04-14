@@ -21,7 +21,7 @@ void FileIO::searchForFilesInFolder()
 m_thePath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0);
 #endif
 
-#ifdef Q_OS_WIN || Q_OS_IOS
+#if defined(Q_OS_WIN) || defined(Q_OS_IOS)
       m_thePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).value(0);
 #endif
 
