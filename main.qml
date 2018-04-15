@@ -15,9 +15,14 @@ ApplicationWindow {
     Connections
     {
         target: theTcpClient
-        onRequestPermission:
+        onNeedToReQuestPermission:
         {
-            console.log("as;dkasl;dkl;asl;d")
+            if(!getPermissionDialog.opened)
+            {
+                getPermissionDialog.open()
+            }
+
+
         }
     }
 
@@ -28,9 +33,9 @@ ApplicationWindow {
 
         Row{
             //            anchors.fill: parent
-//            anchors.top: parent.top
-//            anchors.left: parent.left
-//            width: 500
+            //            anchors.top: parent.top
+            //            anchors.left: parent.left
+            //            width: 500
             anchors.fill: parent
             //            anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -204,35 +209,6 @@ ApplicationWindow {
 
             }
 
-
-//            ToolButton
-//            {
-//                text: "Play program"
-
-//                id: testProgramButton
-//                implicitHeight: 60
-//                font.pixelSize: Qt.application.font.pixelSize * 1.6
-//                visible: {
-//                    if(stackView.currentItem.objectName == "SetupModePage") true
-//                    else false
-//                }
-
-//                //                       visible: true
-
-//                background: Rectangle
-//                {
-
-//                    height: toolButton.implicitHeight * 0.7
-//                    radius: 5
-//                    color: testProgramButton.pressed ? "tomato" : "white"
-//                    anchors.verticalCenter: parent.verticalCenter
-//                }
-
-//                onClicked:
-//                {
-//                    stackView.currentItem.testProgram()
-//                }
-//            }
 
 
             Rectangle
@@ -443,6 +419,43 @@ ApplicationWindow {
             svAddresDialog.text = ""
             svAddresDialog.close()
         }
+    }
+
+    Dialog
+    {
+        id: getPermissionDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        parent: Overlay.overlay
+
+        focus: true
+        modal: true
+        title: "Fountain Control Permission"
+        closePolicy: Popup.NoAutoClose
+        standardButtons:Dialog.Yes | Dialog.No
+
+        ColumnLayout
+        {
+            spacing: 20
+            anchors.fill:  parent
+
+            Label
+            {
+                text: "Take control ?"
+            }
+
+
+        }
+
+        onAccepted:
+        {
+            theTcpClient.requestPermission()
+        }
+        onRejected:
+        {
+            theTcpClient.disconnect()
+        }
+
     }
 
     Settings

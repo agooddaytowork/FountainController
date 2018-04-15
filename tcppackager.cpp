@@ -175,3 +175,19 @@ QByteArray tcpPackager::requestToAddNewClient()
 
 }
 
+QByteArray tcpPackager::requestToGetPermission()
+{
+    QJsonObject thePackage;
+    qint64 theTimeStamp = QDateTime::currentMSecsSinceEpoch();
+    QByteArray time;
+    time.append(QString::number(theTimeStamp));
+    thePackage.insert("ClientId", m_clientId);
+    thePackage.insert("ClientType", m_clientType);
+    thePackage.insert("UUID", (QString) QCryptographicHash::hash(theSecretKey + time, QCryptographicHash::Sha256));
+    thePackage.insert("TimeStamp",QString::number(theTimeStamp) );
+    thePackage.insert("Command", "getControlPermission");
+
+    QJsonDocument aDocument(thePackage);
+    return aDocument.toJson();
+}
+

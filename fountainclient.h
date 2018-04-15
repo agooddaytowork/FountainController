@@ -37,6 +37,7 @@ public:
     Q_INVOKABLE void setHostName(const QString &hostName);
     Q_INVOKABLE void setPort(const quint16 &port);
     Q_INVOKABLE void disconnect();
+    Q_INVOKABLE void requestPermission();
 
 
     bool isSVOnline() const;
@@ -48,7 +49,7 @@ public:
 signals:
     void isSVOnlineChanged(bool);
     void isFountainOnlineChanged(bool);
-    void requestPermission();
+    void needToReQuestPermission();
 private slots:
     void readyReadHandler();
 

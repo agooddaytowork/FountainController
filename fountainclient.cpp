@@ -102,7 +102,7 @@ void fountainClient::readyReadHandler()
             }
             else
             {
-                emit requestPermission();
+                emit needToReQuestPermission();
 #if fountainClientDebug
                 qDebug() << "whoIsControlling - don't have permission ha -> request di";
 #endif
@@ -119,7 +119,7 @@ void fountainClient::readyReadHandler()
 void fountainClient::sendProgram( const QString &programName,const QByteArray &program)
 {
 
-    emit requestPermission();
+
     QByteArray block;
 
     QDataStream out(&block, QIODevice::WriteOnly);
@@ -165,6 +165,18 @@ void fountainClient::setIsSVOnline(bool input)
 void fountainClient::disconnect()
 {
     tcpSocket->close();
+}
+
+void fountainClient::requestPermission()
+{
+    QByteArray block;
+
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_8);
+
+    out << tcpPackager::requestToGetPermission();
+
+    tcpSocket->write(block);
 }
 
 bool fountainClient::isFountainOnline() const

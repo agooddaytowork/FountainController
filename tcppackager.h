@@ -31,6 +31,7 @@ public:
     static QByteArray AnswerWhoIsControlling(const QString &clientId, const int &clientType);
     static QByteArray AskWhoIsControlling();
     static QByteArray requestToAddNewClient();
+    static QByteArray requestToGetPermission();
 
 
 
