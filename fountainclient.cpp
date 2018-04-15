@@ -28,13 +28,16 @@ fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new 
             // check for fountain Online Status
 
             out << tcpPackager::requestToAddNewClient();
-
-
             qDebug() << tcpSocket->write(block);
-
 
             out <<tcpPackager::AskWhoIsControlling();
             qDebug() << tcpSocket->write(block);
+
+
+
+
+
+
 
 
         }
@@ -98,6 +101,12 @@ void fountainClient::readyReadHandler()
 #if fountainClientDebug
                 qDebug() << "whoIsControlling - yeah, you have permission baby";
 #endif
+                QByteArray block;
+
+                QDataStream out(&block, QIODevice::WriteOnly);
+                out.setVersion(QDataStream::Qt_5_8);
+                out << tcpPackager::isFountainOnline();
+                qDebug() << tcpSocket->write(block);
 
             }
             else
