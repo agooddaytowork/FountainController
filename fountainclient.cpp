@@ -5,11 +5,8 @@
 #include "tcppackager.h"
 
 
-fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new QTcpSocket(this)), m_Connected(false), m_IsFountainOnline(false)
+fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new QTcpSocket(this)), m_Connected(false), m_IsFountainOnline(false), m_CurrentControllingId("")
 {
-
-
-
     in.setDevice(tcpSocket);
     in.setVersion(QDataStream::Qt_5_8);
 
@@ -33,13 +30,6 @@ fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new 
             out <<tcpPackager::AskWhoIsControlling();
             qDebug() << tcpSocket->write(block);
 
-
-
-
-
-
-
-
         }
 
     });
@@ -51,6 +41,18 @@ fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new 
     //    QObject::connect(tcpSocket,&QTcpSocket::error, [=](){
     //       setIsSVOnline(false);
     //    });
+
+    QObject::connect(tcpSocket,&QTcpSocket::aboutToClose,[=](){
+
+        QByteArray block;
+
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_5_8);
+
+        out << tcpPackager::aboutToDisconnect();
+
+        tcpSocket->write(block);
+    });
 
 }
 
@@ -90,8 +92,13 @@ void fountainClient::readyReadHandler()
         {
 
         }
+        else if(theCommand == "Disconnecting")
+        {
+
+        }
         else if(theCommand == "whoIsControlling")
         {
+            m_CurrentControllingId = svReply["ClientId"].toString();
             if(svReply["ClientId"].toString() == tcpPackager::m_clientId)
             {
                 // this device is not in control
@@ -139,6 +146,18 @@ void fountainClient::sendProgram( const QString &programName,const QByteArray &p
     tcpSocket->write(block);
 
 
+}
+
+void fountainClient::sendSpeed(const QByteArray &data)
+{
+    QByteArray block;
+
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_8);
+
+    out << tcpPackager::playSpeed(data);
+
+    tcpSocket->write(block);
 }
 
 void fountainClient::setHostName(const QString &hostName)

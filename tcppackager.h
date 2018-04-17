@@ -21,6 +21,7 @@ public:
     tcpPackager();
     static QString generateClientId();
     static QByteArray playProgram(const QString &programName, const QByteArray &Program);
+    static QByteArray playSpeed(const QByteArray &data);
     static QByteArray isFountainOnline();
     static QByteArray fountainResponse(const QByteArray &response);
     static QByteArray fountainStatus(const bool &status);
@@ -32,6 +33,7 @@ public:
     static QByteArray AskWhoIsControlling();
     static QByteArray requestToAddNewClient();
     static QByteArray requestToGetPermission();
+    static QByteArray aboutToDisconnect();
 
 
 

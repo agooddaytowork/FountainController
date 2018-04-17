@@ -44,6 +44,7 @@ public:
     Q_INVOKABLE  QByteArray serializedProgram(const QString &programName);
     Q_INVOKABLE bool getGroupSync();
     Q_INVOKABLE void setGroupSync(const bool &input);
+    Q_INVOKABLE  QByteArray serializeSpeed(const int &programNo, const int &speed);
 
 signals:
     void out(QHash<int, QVariant>);

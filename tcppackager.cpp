@@ -36,6 +36,24 @@ QByteArray tcpPackager::playProgram(const QString &programName, const QByteArray
     return aDocument.toJson();
 }
 
+QByteArray tcpPackager::playSpeed(const QByteArray &data)
+{
+    QJsonObject thePackage;
+
+    qint64 theTimeStamp = QDateTime::currentMSecsSinceEpoch();
+    QByteArray time;
+    time.append(QString::number(theTimeStamp));
+    thePackage.insert("ClientId", m_clientId);
+    thePackage.insert("ClientType", m_clientType);
+    thePackage.insert("UUID", (QString) QCryptographicHash::hash(theSecretKey + time, QCryptographicHash::Sha256));
+    thePackage.insert("TimeStamp",QString::number(theTimeStamp) );
+    thePackage.insert("Command", "playSpeed");
+    thePackage.insert("Speed", (QString) data.toHex());
+
+    QJsonDocument aDocument(thePackage);
+    return aDocument.toJson();
+}
+
 
 bool tcpPackager::isPackageValid(const QByteArray &input)
 {
@@ -186,6 +204,22 @@ QByteArray tcpPackager::requestToGetPermission()
     thePackage.insert("UUID", (QString) QCryptographicHash::hash(theSecretKey + time, QCryptographicHash::Sha256));
     thePackage.insert("TimeStamp",QString::number(theTimeStamp) );
     thePackage.insert("Command", "getControlPermission");
+
+    QJsonDocument aDocument(thePackage);
+    return aDocument.toJson();
+}
+
+QByteArray tcpPackager::aboutToDisconnect()
+{
+    QJsonObject thePackage;
+    qint64 theTimeStamp = QDateTime::currentMSecsSinceEpoch();
+    QByteArray time;
+    time.append(QString::number(theTimeStamp));
+    thePackage.insert("ClientId", m_clientId);
+    thePackage.insert("ClientType", m_clientType);
+    thePackage.insert("UUID", (QString) QCryptographicHash::hash(theSecretKey + time, QCryptographicHash::Sha256));
+    thePackage.insert("TimeStamp",QString::number(theTimeStamp) );
+    thePackage.insert("Command", "Disconnecting");
 
     QJsonDocument aDocument(thePackage);
     return aDocument.toJson();

@@ -211,3 +211,18 @@ void fountainSerial::resetGroupIdandEnable()
 
 }
 
+QByteArray fountainSerial::serializeSpeed(const int &programNo, const int &speed)
+{
+
+    QByteArray test;
+
+    test << m_startFlag;
+    test << m_playSpeed;
+    test << (quint8) programNo;
+    test << (quint8) speed;
+
+    test << m_endFlag;
+
+    return test;
+}
+

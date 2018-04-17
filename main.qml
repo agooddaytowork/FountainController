@@ -20,13 +20,22 @@ ApplicationWindow {
             if(!getPermissionDialog.opened)
             {
                 getPermissionDialog.open()
+
             }
 
 
         }
+
+        onCurrentControllingIDDisconnecting:
+        {
+           if(appSetting.mainController)
+           {
+               getPermissionDialog.close()
+               theTcpClient.requestPermission()
+           }
+
+        }
     }
-
-
 
     header: ToolBar {
         contentHeight: toolButton.implicitHeight
@@ -43,7 +52,7 @@ ApplicationWindow {
             ToolButton {
                 id: toolButton
                 implicitHeight: 60
-                text:   "\u2630"
+                text:   ">"
                 font.pixelSize: Qt.application.font.pixelSize * 1.6
 
                 onClicked: optionsMenu.open()
@@ -74,7 +83,6 @@ ApplicationWindow {
                     }
                 }
             }
-
 
             Rectangle
             {
@@ -209,8 +217,6 @@ ApplicationWindow {
 
             }
 
-
-
             Rectangle
             {
                 width: 50
@@ -238,7 +244,11 @@ ApplicationWindow {
                         svAddresDialog.open()
                     }
 
-
+                    pressAndHoldInterval: 3000
+                    onPressAndHold:
+                    {
+                        setMainControllerDialog.open()
+                    }
                 }
 
             }
@@ -257,6 +267,16 @@ ApplicationWindow {
                     anchors.verticalCenter: parent.verticalCenter
                     source: theTcpClient.isFountainOnline? "images/fountainOnline.png" : "images/fountainOffline.png"
                     scale: 0.8
+                }
+
+                MouseArea
+                {
+                    id: fountainStatusIconMouseArea
+                    anchors.fill: parent
+                    pressAndHoldInterval: 3000
+                    onPressAndHold: {
+                        stackView.push(Qt.resolvedUrl("SettinSpeed.qml"))
+                    }
                 }
 
             }
@@ -458,10 +478,48 @@ ApplicationWindow {
 
     }
 
+    Dialog
+    {
+        id: setMainControllerDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        parent: Overlay.overlay
+
+        focus: true
+        modal: true
+        title: "Main Controller"
+        closePolicy: Popup.NoAutoClose
+        standardButtons:Dialog.Yes | Dialog.No
+
+        ColumnLayout
+        {
+            spacing: 20
+            anchors.fill:  parent
+
+            Label
+            {
+                text: "Set this app as the main controller ?"
+            }
+
+
+        }
+
+        onAccepted:
+        {
+            appSetting.mainController = true
+        }
+        onRejected:
+        {
+            appSetting.mainController = false
+        }
+
+    }
+
     Settings
     {
         id: appSetting
         property string hostAddress: ""
+        property bool mainController: false
 
     }
 

@@ -24,6 +24,7 @@ class fountainClient: public QObject
 
     bool m_Connected;
     bool m_IsFountainOnline;
+    QString m_CurrentControllingId;
 
 
 
@@ -34,6 +35,7 @@ public:
     Q_INVOKABLE void connect(const QString &ip, const quint16 &port);
     Q_INVOKABLE void connect();
     Q_INVOKABLE void sendProgram(const QString &programName, const QByteArray &program);
+    Q_INVOKABLE void sendSpeed(const QByteArray &data);
     Q_INVOKABLE void setHostName(const QString &hostName);
     Q_INVOKABLE void setPort(const quint16 &port);
     Q_INVOKABLE void disconnect();
@@ -50,6 +52,7 @@ signals:
     void isSVOnlineChanged(bool);
     void isFountainOnlineChanged(bool);
     void needToReQuestPermission();
+    void currentControllingIDDisconnecting();
 private slots:
     void readyReadHandler();
 

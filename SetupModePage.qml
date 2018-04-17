@@ -12,6 +12,8 @@ Item {
 
     property ListModel fountainProgramModel: ListModel {}
     property bool manualMode: false
+    property int listCellHeigh: 45
+    property int listCacheBuffer: 0
 
     function testProgram()
     {
@@ -292,7 +294,7 @@ Item {
         id: setupModePageGridView
 
 //        columnSpacing: 5
-        rowSpacing: 15
+        rowSpacing: 5
         rows: {
             if(parent.width >= 1200)
             {
@@ -349,7 +351,7 @@ Item {
                 model: fountainProgramModel
                 anchors.fill: parent
                 clip: true
-                cacheBuffer: 0
+                cacheBuffer: listCacheBuffer
 
                 delegate: SwipeDelegate{
 
@@ -357,7 +359,7 @@ Item {
                     property int programListSwipeDelegateIndex: index
 
                     width: parent.width
-                    height: 60
+                    height: listCellHeigh
                     text: programName
                     font.pixelSize: 16
                     background: Rectangle {
@@ -376,7 +378,6 @@ Item {
                         border.color: "black"
                         border.width: 1
                     }
-
 
 
                     swipe.right: Label {
@@ -457,7 +458,7 @@ Item {
             ListView{
                 id: fountainGroupList
                 model: fountainProgramModel.get(0).groups
-                cacheBuffer: 1500
+                cacheBuffer: listCacheBuffer
                 anchors.fill: parent
                 clip: true
 
@@ -466,7 +467,7 @@ Item {
                     id: fountainGroupListSwipeDelegate
                     property int fountainGroupListSwipeDelegateIndex: index
                     width: parent.width
-                    height: 60
+                    height: listCellHeigh
                     text: groupName
                     font.pixelSize: 16
                     background: Rectangle{
@@ -552,7 +553,7 @@ Item {
                 model: fountainProgramModel.get(0).groups.get(0).fountains
                 anchors.fill: parent
                 clip: true
-                cacheBuffer: 1500
+                cacheBuffer: listCacheBuffer
 
                 delegate: SwipeDelegate{
 
@@ -560,7 +561,7 @@ Item {
                     property int fountainSwipeDelegateIndex: index
                     width: parent.width
 
-                    height: 60
+                    height: listCellHeigh
                     font.pixelSize: 16
                     text: "đài " + fountainName
                     background: Rectangle{
