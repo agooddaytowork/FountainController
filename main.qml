@@ -11,14 +11,17 @@ ApplicationWindow {
     height: 600
     title: qsTr("FountainController")
 
+    property bool aboutToclose: false
+
 
     onClosing:
     {
         if(theTcpClient.isSVOnline)
         {
+            window.aboutToclose = true
             close.accepted = false
             theTcpClient.sendDiconnectNotification()
-
+            askForQuitApplicationDialog.open()
 
         }
 
@@ -33,7 +36,11 @@ ApplicationWindow {
         {
             if(!getPermissionDialog.opened)
             {
-                getPermissionDialog.open()
+               if(!window.aboutToclose)
+               {
+                   getPermissionDialog.open()
+               }
+
 
             }
 
@@ -50,7 +57,7 @@ ApplicationWindow {
         }
         onSentDisconnectingNotification:
         {
-            askForQuitApplicationDialog.open()
+
         }
     }
 
