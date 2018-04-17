@@ -12,6 +12,20 @@ ApplicationWindow {
     title: qsTr("FountainController")
 
 
+    onClosing:
+    {
+        if(theTcpClient.isSVOnline)
+        {
+            close.accepted = false
+            theTcpClient.sendDiconnectNotification()
+
+
+        }
+
+
+
+    }
+
     Connections
     {
         target: theTcpClient
@@ -28,12 +42,15 @@ ApplicationWindow {
 
         onCurrentControllingIDDisconnecting:
         {
-           if(appSetting.mainController)
-           {
-               getPermissionDialog.close()
-               theTcpClient.requestPermission()
-           }
-
+            if(appSetting.mainController)
+            {
+                getPermissionDialog.close()
+                theTcpClient.requestPermission()
+            }
+        }
+        onSentDisconnectingNotification:
+        {
+            askForQuitApplicationDialog.open()
         }
     }
 
@@ -327,7 +344,7 @@ ApplicationWindow {
         id: inputDialog
 
         x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
+        y: (parent.height - height) / 4
         parent: Overlay.overlay
 
         focus: true
@@ -369,7 +386,7 @@ ApplicationWindow {
         id: svAddresDialog
 
         x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
+        y: (parent.height - height) / 4
         parent: Overlay.overlay
 
         focus: true
@@ -401,6 +418,7 @@ ApplicationWindow {
 
                 visible: theTcpClient.isSVOnline
                 onClicked: {
+                    theTcpClient.sendDiconnectNotification()
                     theTcpClient.disconnect()
 
                 }
@@ -445,7 +463,7 @@ ApplicationWindow {
     {
         id: getPermissionDialog
         x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
+        y: (parent.height - height) / 4
         parent: Overlay.overlay
 
         focus: true
@@ -473,6 +491,8 @@ ApplicationWindow {
         }
         onRejected:
         {
+
+            theTcpClient.sendDiconnectNotification()
             theTcpClient.disconnect()
         }
 
@@ -482,7 +502,7 @@ ApplicationWindow {
     {
         id: setMainControllerDialog
         x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
+        y: (parent.height - height) / 4
         parent: Overlay.overlay
 
         focus: true
@@ -498,19 +518,72 @@ ApplicationWindow {
 
             Label
             {
-                text: "Set this app as the main controller ?"
+                text:
+                {
+                    if(appSetting.mainController)
+                    {
+                        "Unset this app as the main controller ?"
+                    }
+                    else
+                    {
+                        "Set this app as the main controller ?"
+                    }
+                }
             }
+        }
 
+        onAccepted:
+        {
+            if(appSetting.mainController)
+            {
+                appSetting.mainController = false
+            }
+            else
+            {
+                appSetting.mainController = true
+            }
+        }
+        onRejected:
+        {
+            setMainControllerDialog.close()
+        }
+    }
+
+    Dialog
+    {
+        id: askForQuitApplicationDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 4
+        parent: Overlay.overlay
+
+        focus: true
+        modal: true
+        title: "Exit"
+        closePolicy: Popup.NoAutoClose
+        standardButtons:Dialog.Yes | Dialog.No
+
+        ColumnLayout
+        {
+            spacing: 20
+            anchors.fill:  parent
+
+            Label
+            {
+                text: "Do you want to close the program?"
+            }
 
         }
 
         onAccepted:
         {
-            appSetting.mainController = true
+
+            theTcpClient.disconnect()
+            Qt.quit()
         }
         onRejected:
         {
-            appSetting.mainController = false
+            theTcpClient.connect(appSetting.hostAddress,8080)
+            askForQuitApplicationDialog.close()
         }
 
     }

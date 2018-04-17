@@ -39,6 +39,7 @@ public:
     Q_INVOKABLE void setHostName(const QString &hostName);
     Q_INVOKABLE void setPort(const quint16 &port);
     Q_INVOKABLE void disconnect();
+    Q_INVOKABLE void sendDiconnectNotification();
     Q_INVOKABLE void requestPermission();
 
 
@@ -53,6 +54,7 @@ signals:
     void isFountainOnlineChanged(bool);
     void needToReQuestPermission();
     void currentControllingIDDisconnecting();
+    void sentDisconnectingNotification();
 private slots:
     void readyReadHandler();
 

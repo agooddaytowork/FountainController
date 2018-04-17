@@ -21,6 +21,9 @@ SOURCES += main.cpp \
 RESOURCES += qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
+ios{
+QML_IMPORT_PATH = /Users/tamduong/Qt/5.10.0/ios/QtQuick/Controls.2
+}
 QML_IMPORT_PATH =
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer

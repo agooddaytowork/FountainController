@@ -42,17 +42,6 @@ fountainClient::fountainClient(QObject *parent): QObject(parent), tcpSocket(new 
     //       setIsSVOnline(false);
     //    });
 
-    QObject::connect(tcpSocket,&QTcpSocket::aboutToClose,[=](){
-
-        QByteArray block;
-
-        QDataStream out(&block, QIODevice::WriteOnly);
-        out.setVersion(QDataStream::Qt_5_8);
-
-        out << tcpPackager::aboutToDisconnect();
-
-        tcpSocket->write(block);
-    });
 
 }
 
@@ -95,6 +84,10 @@ void fountainClient::readyReadHandler()
         else if(theCommand == "Disconnecting")
         {
 
+            if(svReply["ClientId"].toString() == m_CurrentControllingId)
+            {
+                emit currentControllingIDDisconnecting();
+            }
         }
         else if(theCommand == "whoIsControlling")
         {
@@ -193,6 +186,20 @@ void fountainClient::setIsSVOnline(bool input)
 void fountainClient::disconnect()
 {
     tcpSocket->close();
+}
+
+void fountainClient::sendDiconnectNotification()
+{
+    QByteArray block;
+
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_8);
+
+    out << tcpPackager::aboutToDisconnect();
+
+    tcpSocket->write(block);
+
+    emit sentDisconnectingNotification();
 }
 
 void fountainClient::requestPermission()
