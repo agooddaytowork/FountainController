@@ -37,6 +37,7 @@ class fountainSerial : public QObject
     void setGroupID(const quint16 &id);
     void setProgramData(QJsonObject data);
     QByteArray generateSerializedByteArray();
+    QByteArray generateTurnOffAllFountainPackage();
 
 public:
     fountainSerial( QObject * parent = nullptr);

@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
+import Qt.labs.settings 1.0
 
 Item {
     id: root
@@ -11,9 +12,22 @@ Item {
     property int fountainIndex: 0
 
     property ListModel fountainProgramModel: ListModel {}
-    property bool manualMode: false
+
     property int listCellHeigh: 45
     property int listCacheBuffer: 0
+
+    function setManualMode(data)
+    {
+        setupModeSetting.manualMode = data
+    }
+
+    Settings
+    {
+        id: setupModeSetting
+        property bool manualMode: false
+
+
+    }
 
     function testProgram()
     {
@@ -421,7 +435,7 @@ Item {
                         fountainIndex = 0
                         fountainList.model = fountainProgramModel.get(root.programIndex).groups.get(fountaingroupIndex).fountains
 
-                        if(manualMode)
+                        if(setupModeSetting.manualMode)
                         {
                             testProgram()
                         }
@@ -500,7 +514,7 @@ Item {
                             fountainProgramModel.get(programIndex).groups.setProperty(fountainGroupListSwipeDelegateIndex,"fountainGroupEnable", checked)
 
                             updateProgramToTextFile()
-                            if(manualMode)
+                            if(setupModeSetting.manualMode)
                             {
                                 testProgram()
                             }
@@ -584,7 +598,7 @@ Item {
                             fountainProgramModel.get(programIndex).groups.get(fountaingroupIndex).fountains.setProperty(fountainSwipeDelegateIndex,"fountainEnable", checked)
                             updateProgramToTextFile()
 
-                            if(manualMode)
+                            if(setupModeSetting.manualMode)
                             {
                                 testProgram()
                             }
@@ -608,7 +622,7 @@ Item {
 
                             updateProgramToTextFile()
 
-                            if(manualMode)
+                            if(setupModeSetting.manualMode)
                             {
                                 testProgram()
                             }

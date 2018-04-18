@@ -115,6 +115,8 @@ QByteArray fountainSerial::generateSerializedByteArray()
     return output;
 }
 
+
+
 void fountainSerial::setProgramData( QJsonObject data)
 {
     int i = 0;
@@ -218,6 +220,7 @@ QByteArray fountainSerial::serializeSpeed(const int &programNo, const int &speed
 
     test << m_startFlag;
     test << m_playSpeed;
+    test << (quint8) 2;
     test << (quint8) programNo;
     test << (quint8) speed;
 

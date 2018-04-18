@@ -847,19 +847,28 @@ Item {
         {
             // VERY IMPORTANT SLOTTTTT
 
-            if(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).timeSlotEnable)
+            if(!toHour)
             {
-                console.log("PROGRAM TO BE PLAYED: " + timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program)
-
-                var serialData = fountainProgramSerializer.serializedProgram(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program)
-
-                console.log(serialData)
-
-                if(theTcpClient.isSVOnline)
+                if(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).timeSlotEnable)
                 {
-                    theTcpClient.sendProgram(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program,serialData)
+                    console.log("PROGRAM TO BE PLAYED: " + timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program)
+
+                    var serialData = fountainProgramSerializer.serializedProgram(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program)
+
+                    console.log(serialData)
+
+                    if(theTcpClient.isSVOnline)
+                    {
+                        theTcpClient.sendProgram(timeSLotModelUnsorted.get(autoPlayTimer.currentIndexofPlayingTimeSlot).program,serialData)
+                    }
                 }
             }
+            else
+            {
+                // turn off all station
+            }
+
+
 
             generateAutoPlayTimerInterval()
         }

@@ -321,10 +321,9 @@ ApplicationWindow {
                 }
 
                 onCheckedChanged: {
-                    stackView.currentItem.manualMode = manualCheckbox.checked
+                    stackView.currentItem.setManualMode(manualCheckbox.checked)
+//                    stackView.currentItem.setupModeSetting.manualMode = manualCheckbox.checked
                 }
-
-
 
             }
 

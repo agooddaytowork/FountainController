@@ -12,5 +12,6 @@
         <file>images/fountainOffline.png</file>
         <file>images/fountainOnline.png</file>
         <file>images/addNew.png</file>
+        <file>images/icon.png</file>
     </qresource>
 </RCC>

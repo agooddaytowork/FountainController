@@ -20,6 +20,7 @@ SOURCES += main.cpp \
 
 RESOURCES += qml.qrc
 
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 ios{
 QML_IMPORT_PATH = /Users/tamduong/Qt/5.10.0/ios/QtQuick/Controls.2
@@ -33,6 +34,8 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RC_ICONS = icon.ico
 
 HEADERS += \
     fileio.h \
@@ -55,6 +58,7 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
+    android/gradlew.bat \
+    icon.ico
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
